@@ -1,0 +1,41 @@
+{
+    // 整体环境配置 todo
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "amd": true,
+        "es2021": true
+    },
+    // 可以理解为rules的规则合集,这也是一个npm包
+    "extends": [
+        "airbnb-base"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 12
+    },
+    // plugin增加了新的规则,plugin也是npm包
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "rules": {
+        // 后面可以跟很多参数,参数都是放在[]里的,第一个0代表不检查 1爆黄线 2爆红线
+        // 第二个参数表示这个line规则接收的参数,不一定保证一定有
+        // 因为这个不是使用node或者webpack打包的工程. https://github.com/benmosher/eslint-plugin-import/blob/v2.22.0/docs/rules/no-unresolved.md
+        "import/no-unresolved": 0,
+        // 可能因为不能以ts结尾,但是又要规定后缀约束. 与ts产生了冲突
+        "import/extensions": 0,
+        "import/prefer-default-export":0,
+        "no-use-before-define":0,
+        "no-unused-vars":0,
+        // 不能改变参数..这个不合理啊,传object进去要改变很正常啊
+        "no-param-reassign":1,
+        "no-plusplus":0,
+        "no-console" :0,
+        "camelcase": 0,
+        "no-prototype-builtins":0,
+        // 解构赋值
+        "prefer-destructuring":0,
+        "max-classes-per-file":0,
+    }
+}

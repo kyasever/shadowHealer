@@ -1,0 +1,30 @@
+{
+  "compilerOptions": { //ts 编译器选项,忽略会使用默认值
+    "experimentalDecorators": true,
+    "module": "commonJs", // 生成哪个模块系统代码 system可能是默认吧
+    "target": "es5",
+    "allowJs": true,
+    "checkJs": true,
+    //"noImplicitAny": true,  // 不允许使用隐含的any
+    "removeComments": true, // 删除所有注释
+    "preserveConstEnums": true, // 保留const 和 enum的声明
+    "outDir": "./bin", //输出路径 默认相同
+    //"outFile": "./bin/tokenizer.js", //合并为一个文件输出
+    "sourceMap": true, // 生成sourcemap文件
+    "lib": [
+      "ES2015",
+      "DOM"
+    ],
+  },
+  "files": [
+    "node/index.ts"
+  ],
+  "paths": {
+    "@assets/*": [
+      "src/assets/*"
+    ],
+    "@/*": [
+      "src/*"
+    ]
+  }
+}
