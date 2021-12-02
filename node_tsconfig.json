@@ -14,7 +14,7 @@
     "lib": [
       "ES2015",
       "DOM"
-    ],
+    ]
   },
   "files": [
     "node/index.ts"

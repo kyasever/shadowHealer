@@ -1,20 +1,16 @@
-# sh-console
+## IDE:
+vscode 安装插件
+- Volar
+- ESLint
 
+## 环境安装
 
-## node console版本
+安装: node npm yarn (略)
 
 yarn 安装依赖
-
-yarn tsc --watch 开启实时ts编译
-
-node bin/simulator/index.js 运行程序
-
-调试: 在package.json中,对应的scripts点击调试脚本,或者vscode搞个任务都可以.
-
-## web vue版本
-
-开发,调试: cd ./vue && yarn dev 访问本地host即可.
-
-打包: yarn publish-vue <version> 指定一个版本号等待上传即可
+yarn dev 开启vue调试, chrome访问 http://localhost:3000/ 即可开始调试.
+  - 如需打断点,可以在代码里加一条debuuger, 运行到就会中断,在chrome看结果
+  
+yarn publish-vue <version> 指定版本号发布游戏, 看log里的链接即可访问
 
 

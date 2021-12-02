@@ -9,11 +9,10 @@
   "scripts": {
     "dev": "vite",
     "build-vue": "vue-tsc --noEmit && vite build",
+    "publish-vue": "node ./build_vue.js",
+    "localpublish-vue": "cd ./dist && python3 -m http.server 8080",
     "dev-node": "yarn tsc --build node_tsconfig.json --watch",
-    "run-node": "node bin/node/index.js",
-
-    "localpublish-vue": "cd ./vue/dist && python3 -m http.server 8080",
-    "publish-vue": "node ./build_vue.js"
+    "run-node": "node bin/node/index.js"
   },
   "files": [
     "lib",
