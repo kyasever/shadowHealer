@@ -1,5 +1,4 @@
 import { Battle } from './battle';
-import { IEffect } from './effect';
 import { calculateProperty } from './property';
 
 export * from './effect';
@@ -125,4 +124,42 @@ export interface IBuff {
   onCalculateProperty?: (property: IEntityProperty) => void;
   onAdd?: () => void;
   onRemove?: () => void;
+}
+
+/*
+ * makeEffect 核心函数: 所有的数据操作都要走effect
+ */
+export interface IEffect {
+  // 记录中的名字
+  name: string;
+  // 释放者
+  caster: IEntity;
+  // 目标, 每个effect结算一个目标
+  target: IEntity;
+
+  // 默认暴击率取caster
+  critRate?: number;
+  critDamage?: number;
+  isCrit?: boolean;
+
+  // 对target造成伤害(相对于hp变化取反)
+  damage?: number;
+  // 对target造成治疗
+  heal?: number;
+  // 对caster改变ap
+  ap_caster?: number;
+  // 对target改变ap
+  ap_target?: number;
+  // 对target施加buff
+  addBuff?: IBuff;
+  // 移除
+  removeBuff?: IBuff;
+  // 对battle增加实体
+  addEntity?: IEntity;
+
+  // 每一步回调和处理,在这里记录日志
+  logs?: string[];
+
+  // 预期结算时间, 默认为now
+  time?: number;
 }

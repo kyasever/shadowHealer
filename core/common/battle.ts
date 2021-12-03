@@ -9,7 +9,7 @@ import {
   GameConfig,
 } from '.';
 import { updateCharacters } from './systemCharacter';
-import { randomRange, wait } from './utils';
+import { wait } from './utils';
 import { SHLog } from '../log';
 import { CharacterFactory } from '../characters';
 export class Battle {

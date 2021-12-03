@@ -1,4 +1,4 @@
-import { Battle } from '.';
+import { Battle } from '../common';
 
 // 游戏, 决定下一步都做什么
 export class Game {
