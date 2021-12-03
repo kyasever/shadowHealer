@@ -2,7 +2,7 @@
 defineProps<{ msg: string }>()
 import { Battle, GameConfig } from '@core/common';
 import { loadData } from '@core/data'
-import { createBattle } from './runner'
+import { createBattle, custom1 } from './runner'
 import { ref } from 'vue';
 const time = ref('0');
 
@@ -30,13 +30,8 @@ function output() {
   battle.skada.outPut()
 }
 
-function setBattleField() {
-  // 在角色上挂一个事件处理器, 然后用vue去监听角色的事件
-  // afterEffect afterBehit afterCalculate 这些
-}
-
-function load() {
-  console.log(loadData(''))
+function playground() {
+  custom1()
 }
 
 </script>
@@ -44,7 +39,7 @@ function load() {
 <template>
   <h1>{{ msg }}</h1>
   <div>time: {{ time }}</div>
-  <van-button class="btn" @click="load" plain type="primary">run</van-button>
+  <van-button class="btn" @click="playground" plain type="primary">play</van-button>
   <van-button class="btn" @click="run" plain type="primary">run</van-button>
   <van-button class="btn" @click="pause" plain type="primary">pause</van-button>
   <van-button class="btn" @click="setContinue" plain type="primary">continue</van-button>

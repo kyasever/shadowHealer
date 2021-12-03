@@ -1,4 +1,4 @@
-import { CharacterFactory } from '@core/characters';
+import { CharacterFactory, createDead, createTeamDPS } from '@core/characters';
 import { Battle, GameConfig } from '@core/common';
 
 export function createBattle(): Battle {
@@ -12,4 +12,17 @@ export function createBattle(): Battle {
   battle.enemys = [CharacterFactory.enemyBoss()];
   battle.init();
   return battle;
+}
+
+export function custom1() {
+  const battle = new Battle();
+
+  const c1 = createDead(battle);
+  const c2 = createTeamDPS(battle, 'c2', 3000, 200);
+  battle.teams = [c1, c2];
+  battle.enemys = [CharacterFactory.enemyBoss()];
+
+  battle.init();
+  battle.start();
+  battle.skada.outPut('deadman');
 }

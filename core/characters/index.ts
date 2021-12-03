@@ -3,6 +3,10 @@ import { CharacterWizzard } from './fire';
 import { createEnemyBoss, createEnemyStake } from './enemys';
 import { createTeamDPS } from './teams';
 
+export * from './enemys';
+export * from './fire';
+export * from './teams';
+
 export class CharacterFactory {
   static battle: Battle;
 

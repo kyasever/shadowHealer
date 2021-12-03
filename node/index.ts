@@ -4,7 +4,11 @@ import { Battle, FrameCount, GameConfig } from '../core/common';
 import { SHLog } from '../core/log';
 import { debug, time } from 'console';
 import { Commander } from './commander';
-import { CharacterFactory } from '../core/characters';
+import {
+  CharacterFactory,
+  createDead,
+  createTeamDPS,
+} from '../core/characters';
 import { loadData } from '../core/data';
 const program = new Commander();
 program
@@ -13,6 +17,7 @@ program
   .options('--times', 'times', 1)
   .register('stake', stakeSim)
   .register('battle', battleSim)
+  .register('play', play)
   .register('load', load);
 
 if (typeof process !== 'undefined' && process.argv.length > 2) {
@@ -104,5 +109,20 @@ export function battleSim(options) {
   return results;
 }
 
-// 读取存档
-export function initGame() {}
+export function play(options) {
+  const timeLimit = Number(options.time);
+  const log_level = Number(options.logLevel);
+  GameConfig.logLevel = log_level;
+
+  const battle = new Battle();
+  battle.timeLimit = timeLimit;
+
+  const c1 = createDead(battle);
+  const c2 = createTeamDPS(battle, 'c2', 3000, 200);
+  battle.teams = [c1, c2];
+  battle.enemys = [CharacterFactory.enemyBoss()];
+
+  battle.init();
+  battle.start();
+  battle.skada.outPut(options.target);
+}

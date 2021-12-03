@@ -38,12 +38,14 @@ export interface IEntityProperty {
 // 返回一个默认的空Entity
 export function createEntity(
   battle: Battle,
+  name: string,
   property: IEntityProperty,
   entity?: any
 ): IEntity {
   if (!entity) {
     entity = {};
   }
+  entity.name = name;
   entity.battle = battle;
   entity.buffs = {};
   entity.property = property;

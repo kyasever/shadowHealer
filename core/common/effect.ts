@@ -13,6 +13,8 @@ import {
 import { SHLog } from '../log';
 import { Skada } from './skada';
 
+export const MakeEffectInstance = -1;
+
 /**
  * effect在帧末生效
  */

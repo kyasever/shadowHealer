@@ -2,14 +2,13 @@ import { Battle, createEntity, IEntity, makeEffect } from '../common';
 import { SHLog } from '../log';
 
 export function createEnemyStake(battle: Battle): IEntity {
-  const stake: IEntity = createEntity(battle, {
+  const stake: IEntity = createEntity(battle, 'stake', {
     hpmax: 10000,
     apmax: 100,
     attack: 0,
     critRate: 0,
     critDamage: 0,
   });
-  stake.name = 'stake';
   stake.onAttack = () => {};
   stake.onBehit = (effect) => {
     if (effect.damage) {
@@ -30,14 +29,13 @@ export function createEnemyStake(battle: Battle): IEntity {
 }
 
 export function createEnemyBoss(battle: Battle): IEntity {
-  const boss = createEntity(battle, {
+  const boss = createEntity(battle, 'boss', {
     hpmax: 100000,
     apmax: 100,
     attack: 0,
     critRate: 0,
     critDamage: 0,
   });
-  boss.name = 'boss';
   boss.onAttack = () => {
     let target;
     for (let i = 0; i < battle.teams.length; i++) {

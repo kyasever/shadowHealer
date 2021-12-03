@@ -71,6 +71,7 @@ export class CharacterWizzard implements IEntity {
   constructor(battle) {
     createEntity(
       battle,
+      'fire',
       {
         hpmax: 1000,
         apmax: 100,
@@ -78,10 +79,10 @@ export class CharacterWizzard implements IEntity {
         critRate: 0.2,
         critDamage: 2,
       },
+
       this
     );
 
-    this.name = 'fire';
     this.skills = [this.skillFinal, this.skillB, this.skillA, this.skillNormal];
     this.buffs[this.itemLightning.name] = this.itemLightning;
     this.itemLightning.onAdd();
