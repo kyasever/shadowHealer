@@ -6,6 +6,7 @@ export * from './effect';
 export * from './battle';
 export * from './property';
 export * from './utils';
+export * from './skada';
 
 export const GameConfig = {
   logLevel: 1,
@@ -32,8 +33,10 @@ export interface IEntityProperty {
   critRate: number;
   critDamage: number;
   sheildMax?: number;
+  attackInterval?: number;
 }
 
+// 返回一个默认的空Entity
 export function createEntity(
   battle: Battle,
   property: IEntityProperty,
@@ -56,7 +59,7 @@ export function createEntity(
   if (!entity.attackInterval) {
     entity.attackInterval = 1;
   }
-  entity.attackRelease = Math.random() * entity.attackInterval;
+  entity.attackRelease = Math.random() * 1;
   return entity;
 }
 
@@ -68,6 +71,7 @@ export interface IEntity {
   hp: number;
   ap: number;
   sheild: number;
+  attackRelease: number;
   // 原始属性
   property: IEntityProperty;
   // 由calculateProperty赋值,不允许手动更改
@@ -77,17 +81,18 @@ export interface IEntity {
   apmax?: number;
   critRate?: number;
   critDamage?: number;
+  attackInterval?: number;
   // buff & 生命周期
   buffs: { [key: string]: IBuff };
   onEffect?: (effect: IEffect) => void;
   onBehit?: (effect: IEffect) => void;
-
+  afterEffect?: (effect: IEffect) => void;
+  afterBehit?: (effect: IEffect) => void;
   // action & 生命周期
   // 模式1: 每帧精确控制做什么
   onUpdate?: () => void;
   // 模式2: 直到轮到自己行动时控制自己做什么
-  attackInterval?: number;
-  attackRelease?: number;
+
   /** 按照列表检索,顺序为优先级 */
   skills?: ISkill[];
   // 重载这个, 说明要求不高, 只在轮到attack时触发, 其他逻辑托管给系统
@@ -110,11 +115,12 @@ export interface IBuff {
   caster: IEntity;
   // 重复添加buff 取剩余时间更多的一个. undefined 表示无限持续
   release?: number;
+  // 层数
+  stack?: number;
+  maxStack?: number;
   onEffect?: (effect: IEffect) => void;
-  // 计算属性时触发
+  onBehit?: (effect: IEffect) => void;
   onCalculateProperty?: (property: IEntityProperty) => void;
-  // 添加时触发
   onAdd?: () => void;
-  // 移除时触发
   onRemove?: () => void;
 }

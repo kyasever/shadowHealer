@@ -15,12 +15,6 @@ bata1.1 100h 8389ms
 
 # todo:
 
-vue 界面,优化调试体验, 目前的命令行输入效率有点低, 用 UI 会更好一点,
-二期就做: 实时显示数据和精细控制,玩家控制
-
-property 重构. calculateProperty() 解决万物.
-角色的 property 是不能修改的, 只能通过 calculateProperty()获得.在任何必要的时候触发这个函数即可
-
 # roadmap
 
 release:
@@ -44,13 +38,17 @@ beta1.0-11.24
 
 - 可以模拟一场战斗, 支持 node 和 vue 运行.
 - 重构了 commander 换成了自己实现的版本
-  beta1.1-11.29
+
+beta1.1-11.29
+
 - effect 重构, 万物皆 effect, 所有变更均走 makeEffect, 过程记录在 effect 日志中
 - property 重构. 初始化走 calculateProperty().
 - 简单的多次战斗模拟
 - 优化了 debug 方式和 log 统计
-  beta1.2-12.3
-- 引入 phaser,重构项目目录
+
+beta1.2-12.3
+
+- 正式引入 phaser 和 vue,重构项目目录
 
 # 核心逻辑
 

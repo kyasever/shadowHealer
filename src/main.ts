@@ -26,5 +26,7 @@ window.run = (command) => {
 
 // 启动phaser: phaser相关代码位于phaser
 const canvas: any = document.querySelector('#glcanvas');
-const ctx = canvas.getContext('webgl');
-createPhaser(ctx);
+if (canvas) {
+  const ctx = canvas.getContext('webgl');
+  ctx && createPhaser(ctx);
+}

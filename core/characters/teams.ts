@@ -21,11 +21,7 @@ export function createTeamDPS(
       caster: character,
       name: `normal`,
       target: battle.enemys[0],
-      damage: {
-        value: damage,
-        critRate: character.critRate,
-        critDamage: character.critDamage,
-      },
+      damage,
     });
   };
   return character;

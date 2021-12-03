@@ -3,26 +3,28 @@ import { SHLog } from '../log';
 
 export function updateCharacters(battle: Battle) {
   battle.characters.forEach((c) => {
-    if (!c.isAlive) {
-      return;
-    }
-    const buffkeys = Object.keys(c.buffs);
-    for (let i = 0; i < buffkeys.length; i++) {
-      const buff = c.buffs[buffkeys[i]];
-      if (buff.release) {
-        buff.release -= DeltaTime;
-        if (buff.release < 0) {
-          buff.onRemove && buff.onRemove();
-          delete c.buffs[buffkeys[i]];
-          SHLog.debug(`${buff.target.name} remove buff ${buff.name}`);
-        }
-      }
-    }
-    battle.skada.addBuffData(c);
-
     if (c.onUpdate) {
       c.onUpdate();
     }
+    if (!c.isAlive) {
+      return;
+    }
+    // buff结算
+    Object.keys(c.buffs).forEach((key) => {
+      const buff = c.buffs[key];
+      if (buff.release) {
+        buff.release -= DeltaTime;
+        if (buff.release < 0) {
+          makeEffect({
+            caster: buff.caster,
+            target: buff.target,
+            name: 'buff-timeout',
+            removeBuff: buff,
+          });
+        }
+      }
+    });
+    battle.skada.addBuffData(c);
 
     if (!c.attackRelease) {
       return;
@@ -32,8 +34,11 @@ export function updateCharacters(battle: Battle) {
     if (c.attackRelease <= 0) {
       c.attackRelease = c.attackInterval;
 
-      c.skills.forEach((s) => {
-        dealCD(s);
+      c.skills.forEach((skill) => {
+        if (skill.cdRelease === undefined) {
+          skill.cdRelease = 0;
+        }
+        skill.cdRelease -= 1;
       });
 
       if (c.onAttack) {
@@ -70,14 +75,4 @@ export function updateCharacters(battle: Battle) {
       s.onUse();
     }
   });
-}
-
-function dealCD(skill: ISkill) {
-  if (!skill.cd) {
-    return;
-  }
-  if (skill.cdRelease === undefined) {
-    skill.cdRelease = 0;
-  }
-  skill.cdRelease -= 1;
 }

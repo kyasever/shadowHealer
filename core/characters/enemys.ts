@@ -19,11 +19,7 @@ export function createEnemyStake(battle: Battle): IEntity {
             caster: stake,
             target: stake,
             name: 'stakeHealSelf',
-            heal: {
-              value: 5000,
-              critRate: 0,
-              critDamage: 1,
-            },
+            heal: 5000,
           },
           -1
         );
@@ -55,11 +51,7 @@ export function createEnemyBoss(battle: Battle): IEntity {
         caster: boss,
         name: 'bossAttack',
         target,
-        damage: {
-          value: 30,
-          critRate: 0,
-          critDamage: 1,
-        },
+        damage: 30,
       });
     }
   };

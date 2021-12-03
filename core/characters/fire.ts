@@ -64,7 +64,7 @@ export class CharacterWizzard implements IEntity {
   onBehit?: (effect: IEffect) => void;
   onUpdate?: () => void;
   attackInterval?: number;
-  attackRelease?: number;
+  attackRelease: number;
   skills?: ISkill[];
   onAttack?: () => void;
 
@@ -94,22 +94,16 @@ export class CharacterWizzard implements IEntity {
     onEffect: (effect) => {
       if (effect.target !== this) {
         // 增伤10%
-        effect.damage.value *= 1.1;
+        effect.damage *= 1.1;
         if (Math.random() < 0.2) {
           makeEffect({
             caster: this,
             name: 'lightning',
             target: effect.target,
             // 闪电链 攻击时触发
-            damage: {
-              value: 20,
-              critRate: effect.caster.critRate,
-              critDamage: effect.caster.critDamage,
-            },
+            damage: 20,
             // 充能 攻击时触发
-            ap_caster: {
-              value: 2,
-            },
+            ap_caster: 2,
           });
         }
       }
@@ -136,14 +130,10 @@ export class CharacterWizzard implements IEntity {
           target: effect.target,
         };
         if (effect.damage) {
-          newEffect.damage = {
-            value: effect.damage.value * 0.8,
-            critRate: effect.damage.critRate,
-            critDamage: effect.damage.critDamage,
-          };
+          newEffect.damage = effect.damage * 0.8;
         }
         if (effect.ap_caster) {
-          newEffect.ap_caster = { ...effect.ap_caster };
+          newEffect.ap_caster = effect.ap_caster;
         }
 
         makeEffect(newEffect);
@@ -157,11 +147,7 @@ export class CharacterWizzard implements IEntity {
       makeEffect({
         caster: this,
         target: this.battle.enemys[0],
-        damage: {
-          value: this.attack,
-          critRate: this.critRate,
-          critDamage: this.critDamage,
-        },
+        damage: this.attack,
         name: 'Normal',
       });
     },
@@ -175,11 +161,7 @@ export class CharacterWizzard implements IEntity {
         caster: this,
         target: this.battle.enemys[0],
         name: 'A',
-        damage: {
-          value: this.attack * 2,
-          critRate: this.critRate,
-          critDamage: this.critDamage,
-        },
+        damage: this.attack,
       });
     },
   };
@@ -192,14 +174,8 @@ export class CharacterWizzard implements IEntity {
         caster: this,
         target: this.battle.enemys[0],
         name: 'B',
-        damage: {
-          value: this.attack * 1.5,
-          critRate: this.critRate,
-          critDamage: this.critDamage,
-        },
-        ap_caster: {
-          value: 10,
-        },
+        damage: this.attack * 1.5,
+        ap_caster: 10,
       });
     },
   };
@@ -228,17 +204,9 @@ export class CharacterWizzard implements IEntity {
         caster: this,
         target: this.battle.enemys[0],
         name: 'Final',
-        ap_caster: {
-          value: -this.apmax,
-        },
-        damage: {
-          value: this.attack * 3,
-          critRate: this.critRate,
-          critDamage: this.critDamage,
-        },
-        addBuff: {
-          value: this.finalBuff,
-        },
+        ap_caster: -this.apmax,
+        damage: this.attack * 3,
+        addBuff: { ...this.finalBuff },
       });
     },
   };

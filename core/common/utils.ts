@@ -19,6 +19,7 @@ export function changeValue(
     return 0;
   }
   // 临时策略, 长远来看不应该这么粗糙的搞. 目前只卡最后一步,过程中仍然是浮点数
+  // 这个太粗糙了... 还是换成精确的数值调控吧
   value = Math.round(value);
   let end = target[key] + value;
   if (end > max) {

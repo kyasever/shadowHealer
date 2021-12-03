@@ -5,17 +5,22 @@ import { SHLog } from '../core/log';
 import { debug, time } from 'console';
 import { Commander } from './commander';
 import { CharacterFactory } from '../core/characters';
-
+import { loadData } from '../core/data';
 const program = new Commander();
 program
   .options('-t --time', 'time', 60)
   .options('-l --log-level', 'logLevel', 1)
   .options('--times', 'times', 1)
   .register('stake', stakeSim)
-  .register('battle', battleSim);
+  .register('battle', battleSim)
+  .register('load', load);
 
 if (typeof process !== 'undefined' && process.argv.length > 2) {
   program.run();
+}
+
+async function load(file) {
+  return loadData(file);
 }
 
 export function run(cmd: string) {

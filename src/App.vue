@@ -5,8 +5,8 @@ import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
-  <canvas id="glcanvas" style="height: 300px; width: 400px;"></canvas>
-  <img alt="Vue logo" src="./assets/logo.png" style="height: 64px; width: 64px;"/>
+  <canvas v-if="false" id="glcanvas" style="height: 300px; width: 400px;"></canvas>
+  <img alt="Vue logo" src="./assets/logo.png" style="height: 64px; width: 64px;" />
   <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
 </template>
 

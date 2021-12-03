@@ -11,10 +11,13 @@
     "outDir": "./bin", //输出路径 默认相同
     //"outFile": "./bin/tokenizer.js", //合并为一个文件输出
     "sourceMap": true, // 生成sourcemap文件
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "lib": [
       "ES2015",
       "DOM"
-    ]
+    ],
+    "paths": {"@core/*": ["./core/*"]}
   },
   "files": [
     "node/index.ts"
