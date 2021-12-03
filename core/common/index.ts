@@ -118,6 +118,8 @@ export interface IBuff {
   // 层数
   stack?: number;
   maxStack?: number;
+  // 是否是静态, 静态buff不可被驱散, 不走时间
+  static?: boolean;
   onEffect?: (effect: IEffect) => void;
   onBehit?: (effect: IEffect) => void;
   onCalculateProperty?: (property: IEntityProperty) => void;

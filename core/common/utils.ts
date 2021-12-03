@@ -1,9 +1,33 @@
-import { IEntity } from '.';
+import { IEntity, makeEffect } from '.';
 import { SHLog } from '../log';
 
 export function randomRange(min: number, max: number) {
   let dis = max - min;
   return min + Math.random() * dis;
+}
+
+export function changeHp(target: IEntity, value: number) {
+  value = Math.round(value);
+  let end = target.hp + value;
+  if (end > target.hpmax) {
+    end = target.hpmax;
+  }
+  if (end < 0) {
+    end = 0;
+    target.isAlive = false;
+    Object.values(target.buffs).forEach((buff) => {
+      makeEffect({
+        caster: target,
+        target: target,
+        name: 'dead',
+        removeBuff: buff,
+      });
+    });
+    SHLog.info(`${target.name} dead`);
+  }
+  const changed = end - target.hp;
+  target.hp = end;
+  return changed;
 }
 
 /** 修改目标字段, 返回值为实际修改的值 */

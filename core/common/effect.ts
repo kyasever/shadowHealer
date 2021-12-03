@@ -133,20 +133,22 @@ export function _dealEffect(effect: IEffect) {
   if (effect.addBuff) {
     const buff = effect.addBuff;
     const oldBuff = buff.target.buffs[buff.name];
-    if (!oldBuff) {
+    if (!buff.target.buffs[buff.name]) {
       buff.target.buffs[buff.name] = { ...buff };
-    }
-    // 结算堆叠层数
-    if (buff.maxStack) {
-      if (!buff.stack) {
-        buff.stack = 0;
+    } else {
+      // 结算堆叠层数
+      if (oldBuff.maxStack) {
+        if (!oldBuff.stack) {
+          oldBuff.stack = 0;
+        }
+        if (oldBuff.stack < oldBuff.maxStack) {
+          oldBuff.stack++;
+        }
       }
-      if (buff.stack < buff.maxStack) {
-        buff.stack++;
+      if (oldBuff) {
+        oldBuff.release = buff.release;
       }
     }
-    // 如果原来就有这个buff, 取两次添加较长的那次
-    buff.release = Math.max(oldBuff.release, buff.release);
     call(buff, 'onAdd');
     SHLog.debug(`${buff.target.name} add buff ${buff.name}`);
     // addBuff会触发属性计算
@@ -155,8 +157,8 @@ export function _dealEffect(effect: IEffect) {
 
   if (effect.removeBuff) {
     const buff = effect.removeBuff;
-    if (buff.target.buffs[buff.name]) {
-      call(buff.target.buffs[buff.name], 'onRemove');
+    if (!buff.static && buff.target.buffs[buff.name]) {
+      call(buff, 'onRemove');
       delete buff.target.buffs[buff.name];
       SHLog.debug(`${buff.target.name} remove buff ${buff.name}`);
       calculateProperty(buff.target);
