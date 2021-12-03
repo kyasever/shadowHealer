@@ -2,11 +2,15 @@
 
 ## makeEffect
 
+如果是个远程技能,有弹道之类的,则可以用延迟 effect,让 effect 不要立即生效,
+也可以将这个 effect 绑定到其他事件,让其他组件来 makeEffect
+
 - caster.onEffect
 - caster.buff.onEffect
 - target.onBehit
 - target.buff.onBehit
-- makeEffect effect 生效,效果进行结算,在此之后 effect 不应该再被修改了.
+- makeEffect
+  - effect 生效,效果进行结算,在此之后 effect 不应该再被修改了. 比如特效动画类的监听应该放在后面的钩子里
 - target.afterBehit
 - caster.afterEffect
 - skada.addRecord
@@ -16,7 +20,7 @@
 - 起点为 entity.property
 - entity.onCal
 - entity.buff.onCal
-- 终点为 entity 的各项属性, 属性只能计算,不能修改
+  - 终点为 entity 的各项属性, 属性只能计算,不能修改, 这里的增伤都是合并乘区的
 
 ## buff
 
