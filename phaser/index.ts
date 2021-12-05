@@ -1,51 +1,34 @@
-import Phaser from 'phaser';
+import { debug } from 'console';
+import { createGame } from './scene';
 
-export function createPhaser(ctx) {
-  var config: Phaser.Types.Core.GameConfig = {
-    type: Phaser.AUTO,
-    width: 400,
-    height: 300,
-    zoom: 0.5,
-    physics: {
-      default: 'arcade',
-      arcade: {
-        gravity: { y: 200 },
-      },
-    },
-    scene: {
-      preload: preload,
-      create: create,
-    },
-    context: ctx,
+export function createPhaser(id) {
+  const canvas: any = document.querySelector(id);
+  console.log(document);
+  console.log(id);
+  if (!canvas) {
+    console.warn(`未找到节点${id}`);
+    return;
+  }
+
+  //  It's important to set the WebGL context values that Phaser needs:
+  const contextCreationConfig = {
+    alpha: false,
+    depth: false,
+    antialias: true,
+    premultipliedAlpha: true,
+    stencil: true,
+    preserveDrawingBuffer: false,
+    failIfMajorPerformanceCaveat: false,
+    powerPreference: 'default',
   };
 
-  var game = new Phaser.Game(config);
-
-  function preload() {
-    this.load.setBaseURL('http://labs.phaser.io');
-
-    this.load.image('sky', 'assets/skies/space3.png');
-    this.load.image('logo', 'assets/sprites/phaser3-logo.png');
-    this.load.image('red', 'assets/particles/red.png');
+  const ctx: CanvasRenderingContext2D = canvas.getContext(
+    'webgl2',
+    contextCreationConfig
+  );
+  if (!ctx) {
+    console.warn('创建ctx失败');
+    return;
   }
-
-  function create() {
-    this.add.image(400, 300, 'sky');
-
-    var particles = this.add.particles('red');
-
-    var emitter = particles.createEmitter({
-      speed: 100,
-      scale: { start: 1, end: 0 },
-      blendMode: 'ADD',
-    });
-
-    var logo = this.physics.add.image(400, 100, 'logo');
-
-    logo.setVelocity(100, 200);
-    logo.setBounce(1, 1);
-    logo.setCollideWorldBounds(true);
-
-    emitter.startFollow(logo);
-  }
+  createGame(canvas, ctx);
 }

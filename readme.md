@@ -29,7 +29,10 @@ src/main.ts 是程序的主入口
 
 ## 相关学习链接
 
-- [phaser](http://phaser.io/tutorials/making-your-first-phaser-3-game-chinese)
+- [phaser-startup](http://phaser.io/tutorials/making-your-first-phaser-3-game-chinese)
+- [phaser-demo](https://github.com/photonstorm/phaser3-examples)
+- [tilemap-demo](https://blog.ourcade.co/posts/2020/phaser3-mrpas-fov-field-of-view-algorithm-roguelike-dungeon-crawler/)
+
 - [vite](https://vitejs.cn/guide/)
 - [vue3](https://v3.cn.vuejs.org/guide/introduction.html)
 - [vant](https://vant-contrib.gitee.io/vant/v3/#/zh-CN)

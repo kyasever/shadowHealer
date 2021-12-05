@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import { run } from '../node/index';
-import { Button } from 'vant';
+import { Button, Switch } from 'vant';
 import { createPhaser } from '../phaser';
 
 // 学习地址:
@@ -17,6 +17,7 @@ declare const window: any;
 // 启动vue: vue相关代码位于src(非src还得单独配置太麻烦了)
 const app = createApp(App);
 app.use(Button);
+app.use(Switch);
 app.mount('#app');
 
 // 启动命令行: 命令行相关代码位于node
@@ -24,9 +25,4 @@ window.run = (command) => {
   return run(command);
 };
 
-// 启动phaser: phaser相关代码位于phaser
-const canvas: any = document.querySelector('#glcanvas');
-if (canvas) {
-  const ctx = canvas.getContext('webgl');
-  ctx && createPhaser(ctx);
-}
+createPhaser('#glcanvas');
