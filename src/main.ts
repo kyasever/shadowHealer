@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import { run } from '../node/index';
-import { Button, Switch } from 'vant';
+import { Button, Switch, Slider } from 'vant';
 import { createPhaser } from '../phaser';
 
 // 学习地址:
@@ -18,6 +18,7 @@ declare const window: any;
 const app = createApp(App);
 app.use(Button);
 app.use(Switch);
+app.use(Slider);
 app.mount('#app');
 
 // 启动命令行: 命令行相关代码位于node

@@ -23,6 +23,5 @@ export function custom1() {
   battle.enemys = [CharacterFactory.enemyBoss()];
 
   battle.init();
-  battle.start();
-  battle.skada.outPut('deadman');
+  return battle;
 }

@@ -12,6 +12,7 @@ import { updateCharacters } from './systemCharacter';
 import { wait } from './utils';
 import { SHLog } from '../log';
 import { CharacterFactory } from '../characters';
+import { debug } from 'console';
 export class Battle {
   /** 所有场上存活的character, 引用可以保存在多个不同的容器里 */
   characters: IEntity[] = [];
@@ -45,6 +46,9 @@ export class Battle {
     this.characters = [...this.teams, ...this.enemys];
   }
 
+  FPSTimeStart = 0;
+  FPSCount = 0;
+  FPS = 0;
   async start() {
     while (true) {
       // =0 说明不需要间隔,最快速度跑帧
@@ -67,6 +71,15 @@ export class Battle {
         }
       }
 
+      this.FPSCount++;
+      if (this.FPSCount >= FrameCount) {
+        this.FPSCount = 0;
+        // 实际每帧用时ms: (new Date().getTime() - this.FPSTimeStart) / 50
+        // FPS = 1/
+        this.FPS = (1000 / (new Date().getTime() - this.FPSTimeStart)) * 50;
+        this.FPSTimeStart = new Date().getTime();
+      }
+      // 这个函数调用50次所用的时间
       this.update();
       this._updateCallBack && this._updateCallBack();
       if (this.gameResult) {

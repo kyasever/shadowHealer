@@ -3,8 +3,6 @@ import { createGame } from './scene';
 
 export function createPhaser(id) {
   const canvas: any = document.querySelector(id);
-  console.log(document);
-  console.log(id);
   if (!canvas) {
     console.warn(`未找到节点${id}`);
     return;
