@@ -10,18 +10,18 @@ class BackgroundScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('guide', 'src/assets/640x960-guide.png');
-    this.load.image('bg', 'src/assets/bigsky.png');
+    this.load.image('guide', 'assets/demo/640x960-guide.png');
+    this.load.image('bg', 'assets/demo/bigsky.png');
     this.load.atlas(
       'clouds',
-      'src/assets/clouds.png',
-      'src/assets/clouds.json'
+      'assets/demo/clouds.png',
+      'assets/demo/clouds.json'
     );
-    this.load.image('sky', 'src/assets/sky.png');
-    this.load.image('ground', 'src/assets/platform.png');
-    this.load.image('star', 'src/assets/star.png');
-    this.load.image('bomb', 'src/assets/bomb.png');
-    this.load.spritesheet('dude', 'src/assets/dude.png', {
+    this.load.image('sky', 'assets/demo/sky.png');
+    this.load.image('ground', 'assets/demo/platform.png');
+    this.load.image('star', 'assets/demo/star.png');
+    this.load.image('bomb', 'assets/demo/bomb.png');
+    this.load.spritesheet('dude', 'assets/demo/dude.png', {
       frameWidth: 32,
       frameHeight: 48,
     });

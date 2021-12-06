@@ -16,9 +16,17 @@ if (process.argv.length < 3) {
 } else {
   const version = process.argv[2];
   console.log(`准备发布, 版本号${version}`);
-  build_vue().then(() => {
-    publish(version);
-  });
+  build_vue()
+    .then(() => {
+      // 复制资源文件
+      exec('cp -r ./assets ./dist');
+    })
+    .then(() => {
+      publish(version);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 }
 
 async function build_vue() {
@@ -26,10 +34,6 @@ async function build_vue() {
     console.error('build-vue 失败');
     process.exit(1);
   });
-}
-
-async function local_vue() {
-  await exec();
 }
 
 async function publish(version) {

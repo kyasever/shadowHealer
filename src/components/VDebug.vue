@@ -11,10 +11,10 @@ function changeLogLevel() {
   GameConfig.logLevel = logLevel.value
 }
 
-const defaultGameSpeed = 3
+const defaultGameSpeed = 2
 const gameSpeed = ref(defaultGameSpeed)
-const gameSpeedDescription = ['instance', 'x8', 'x4', 'x2', 'x1', 'pause']
-const gameSpeedTruth = [0, DeltaTime / 8, DeltaTime / 4, DeltaTime / 2, DeltaTime, -1]
+const gameSpeedDescription = ['pause', 'x1', 'x2', 'x4', 'x8', 'instance']
+const gameSpeedTruth = [-1, DeltaTime, DeltaTime / 2, DeltaTime / 4, DeltaTime / 8, 0]
 
 
 function changeGameSpeed() {
@@ -25,9 +25,9 @@ const active = ref(2)
 
 let lastSpeed = gameSpeed.value
 function pause() {
-  if (gameSpeed.value !== 5) {
+  if (gameSpeed.value !== 0) {
     lastSpeed = gameSpeed.value
-    gameSpeed.value = 5
+    gameSpeed.value = 0
   } else {
     gameSpeed.value = lastSpeed
   }
@@ -58,7 +58,7 @@ function pause() {
       max="5"
       step="1"
     />
-    <van-button @click="pause">{{ gameSpeed === 5 ? 'run' : 'pause' }}</van-button>
+    <van-button @click="pause">{{ gameSpeed === 0 ? 'run' : 'pause' }}</van-button>
   </div>
 
   <van-tabs v-model="active">
