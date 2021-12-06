@@ -9,7 +9,7 @@ export * from './skada';
 
 export const GameConfig = {
   logLevel: 1,
-  gameSpeed: 0,
+  gameSpeed: 0.02,
 };
 
 export const DeltaTime: number = 0.02;

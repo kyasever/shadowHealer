@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import Battle from './components/Battle.vue'
+import Debug from './components/VDebug.vue'
 import { ref } from 'vue'
 import { createPhaser } from '../phaser'
 
@@ -25,7 +25,7 @@ const refMsg = ref({ v: 'msg' })
 <template>
   <van-switch v-model="enableGame" @change="onCanvasEnable" />gameCanvas
   <van-switch v-model="enableDebug" />debugPanel
-  <Battle v-if="enableDebug" :msg="refMsg" />
+  <Debug v-if="enableDebug" />
   <canvas id="glcanvas"></canvas>
 </template>
 
