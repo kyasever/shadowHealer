@@ -37,7 +37,7 @@ function runBattle() {
 }
 
 function output() {
-  battle?.skada.outPut()
+  battle?.skada.outPut('monk')
 }
 
 

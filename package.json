@@ -19,6 +19,7 @@
     "bin"
   ],
   "dependencies": {
+    "axios": "^0.24.0",
     "node-localstorage": "^2.2.1",
     "phaser": "^3.55.2",
     "vant": "3",
@@ -47,7 +48,9 @@
   "engines": {
     "node": ">= 0.12"
   },
-  "licenses": [{
-    "type": "MIT"
-  }]
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ]
 }

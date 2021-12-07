@@ -3,6 +3,8 @@ import App from './App.vue';
 import { run } from '../node/index';
 import { Button, Switch, Slider, Tab, Tabs } from 'vant';
 import { createPhaser } from '../phaser';
+import axios from 'axios';
+import { initCharacterData } from '@core/characters';
 
 // 学习地址:
 // [vite] https://vitejs.cn/guide/
@@ -29,3 +31,15 @@ window.run = (command) => {
 };
 
 createPhaser('#glcanvas');
+
+axios({
+  method: 'get',
+  url: './assets/data/characters.json',
+})
+  .then((res) => {
+    initCharacterData(res.data);
+  })
+  .catch((err) => {
+    console.error('get data failed');
+    console.error(err);
+  });

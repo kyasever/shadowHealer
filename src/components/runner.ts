@@ -1,4 +1,9 @@
-import { CharacterFactory, createDead, createTeamDPS } from '@core/characters';
+import {
+  CharacterFactory,
+  createDead,
+  createEntityMonk,
+  createTeamDPS,
+} from '@core/characters';
 import { Battle, GameConfig } from '@core/common';
 
 export function createBattle(): Battle {
@@ -17,11 +22,12 @@ export function createBattle(): Battle {
 export function custom1() {
   const battle = new Battle();
 
-  const c1 = createDead(battle);
-  const c2 = createTeamDPS(battle, 'c2', 3000, 200);
-  battle.teams = [c1, c2];
-  battle.enemys = [CharacterFactory.enemyBoss()];
-
+  // const c1 = createDead(battle);
+  // const c2 = createTeamDPS(battle, 'c2', 3000, 200);
+  const c3 = createEntityMonk(battle);
+  battle.teams = [c3];
+  battle.enemys = [CharacterFactory.enemyStake()];
+  battle.timeLimit = 300;
   battle.init();
   return battle;
 }

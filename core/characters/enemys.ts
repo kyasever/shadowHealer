@@ -3,7 +3,7 @@ import { SHLog } from '../log';
 
 export function createEnemyStake(battle: Battle): IEntity {
   const stake: IEntity = createEntity(battle, 'stake', {
-    hpmax: 10000,
+    hpmax: 100000,
     apmax: 100,
     attack: 0,
     critRate: 0,
@@ -12,7 +12,7 @@ export function createEnemyStake(battle: Battle): IEntity {
   stake.onAttack = () => {};
   stake.onBehit = (effect) => {
     if (effect.damage) {
-      if (stake.hp < 2000) {
+      if (stake.hp < stake.hpmax * 0.5) {
         makeEffect(
           {
             caster: stake,

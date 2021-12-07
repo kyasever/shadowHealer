@@ -19,17 +19,20 @@ export const MakeEffectInstance = -1;
  * effect在帧末生效
  */
 export function makeEffect(effect: IEffect, time?: number) {
-  // time为负 代表立即执行
-  if (time && time < 0) {
-    _dealEffect(effect);
-    return;
-  }
-  // 为空或0 代表本帧执行
-  const battle = effect.caster.battle;
-  if (battle) {
-    battle.effectToCall.push(effect);
-  }
-  // 为正数,代表延迟执行
+  // 暂时删除effect的延迟执行机制, 不然调试有点麻烦,堆栈断了...
+  _dealEffect(effect);
+
+  // // time为负 代表立即执行
+  // if (time && time < 0) {
+  //   _dealEffect(effect);
+  //   return;
+  // }
+  // // 为空或0 代表本帧执行
+  // const battle = effect.caster.battle;
+  // if (battle) {
+  //   battle.effectToCall.push(effect);
+  // }
+  // // 为正数,代表延迟执行
 }
 
 /**
@@ -48,26 +51,45 @@ export function _dealEffect(effect: IEffect) {
   const log = (msg) => {
     effect.logs.push(msg);
   };
+
+  // ----- 回调处理阶段 -----
   const call = (obj, eventName: string) => {
+    if (!obj) {
+      SHLog.error(`effect entity not fond`);
+      console.log(effect);
+      return;
+    }
     if (obj[eventName]) {
       let res = obj[eventName](effect);
       if (!res) {
         res = `${obj.name} called ${eventName}`;
       }
       log(res);
+      return res;
     }
   };
-
-  // ----- 回调处理阶段 -----
-  call(caster, 'onEffect');
-  Object.values(caster.buffs).forEach((buff) => {
-    call(buff, 'onEffect');
-  });
+  let callRes = call(caster, 'onEffect');
+  if (callRes === 'reject') {
+    return;
+  }
+  for (let i = 0; i < Object.keys(caster.buffs).length; i++) {
+    let buffname = Object.keys(caster.buffs)[i];
+    call(caster.buffs[buffname], 'onEffect');
+    if (callRes === 'reject') {
+      return;
+    }
+  }
   call(target, 'onBehit');
-  Object.values(target.buffs).forEach((buff) => {
-    call(buff, 'onBehit');
-  });
-
+  if (callRes === 'reject') {
+    return;
+  }
+  for (let i = 0; i < Object.keys(target.buffs).length; i++) {
+    let buffname = Object.keys(target.buffs)[i];
+    call(target.buffs[buffname], 'onBehit');
+    if (callRes === 'reject') {
+      return;
+    }
+  }
   // ----- 变更结算阶段 -----
   effect.isCrit = Math.random() < effect.critRate;
   if (effect.isCrit) {

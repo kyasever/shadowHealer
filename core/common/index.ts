@@ -85,19 +85,19 @@ export interface IEntity {
   attackInterval?: number;
   // buff & 生命周期
   buffs: { [key: string]: IBuff };
-  onEffect?: (effect: IEffect) => void;
-  onBehit?: (effect: IEffect) => void;
-  afterEffect?: (effect: IEffect) => void;
-  afterBehit?: (effect: IEffect) => void;
+  onEffect?: (effect: IEffect) => any;
+  onBehit?: (effect: IEffect) => any;
+  afterEffect?: (effect: IEffect) => any;
+  afterBehit?: (effect: IEffect) => any;
   // action & 生命周期
   // 模式1: 每帧精确控制做什么
-  onUpdate?: () => void;
+  onUpdate?: () => any;
   // 模式2: 直到轮到自己行动时控制自己做什么
 
   /** 按照列表检索,顺序为优先级 */
   skills?: ISkill[];
   // 重载这个, 说明要求不高, 只在轮到attack时触发, 其他逻辑托管给系统
-  onAttack?: () => void;
+  onAttack?: () => any;
 }
 
 export interface ISkill {
@@ -107,7 +107,8 @@ export interface ISkill {
   apNeed?: number;
   cd?: number;
   cdRelease?: number;
-  onUse?: () => void;
+  custom?: any;
+  onUse?: () => any;
 }
 
 export interface IBuff {
@@ -121,11 +122,11 @@ export interface IBuff {
   maxStack?: number;
   // 是否是静态, 静态buff不可被驱散, 不走时间
   static?: boolean;
-  onEffect?: (effect: IEffect) => void;
-  onBehit?: (effect: IEffect) => void;
-  onCalculateProperty?: (property: IEntityProperty) => void;
-  onAdd?: () => void;
-  onRemove?: () => void;
+  onEffect?: (effect: IEffect) => any;
+  onBehit?: (effect: IEffect) => any;
+  onCalculateProperty?: (property: IEntityProperty) => any;
+  onAdd?: () => any;
+  onRemove?: () => any;
 }
 
 /*

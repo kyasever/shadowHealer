@@ -152,7 +152,7 @@ class GameScene extends Phaser.Scene {
         this.GAME_WIDTH / 2,
         this.GAME_HEIGHT - 16,
         'Press X to toggle mobile guide',
-        { fontSize: '16px', fill: '#ffffff' }
+        { fontSize: '16px', color: '#ffffff' }
       )
       .setDepth(1)
       .setOrigin(0.5);
@@ -243,7 +243,7 @@ class GameScene extends Phaser.Scene {
     //  The score
     this.scoreText = this.add.text(32, 8, 'score: 0', {
       fontSize: '32px',
-      fill: '#000',
+      color: '#000',
     });
 
     //  Collide the player and the stars with the platforms
