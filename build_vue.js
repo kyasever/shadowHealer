@@ -23,7 +23,7 @@ async function main(version) {
   } catch (e) {
     if (typeof e !== 'number') {
       console.log('未检测到coscmd,尝试安装,需要python');
-      await exec('pip install coscmd');
+      await exec('python -m pip install coscmd');
     }
   }
   console.log('step5 上传cos');
