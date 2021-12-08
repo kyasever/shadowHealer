@@ -40,7 +40,7 @@ async function main(version) {
 
 async function publish(version) {
   const cos_config =
-    'coscmd config -a AKIDYv2sRkmW0kDPKzNUKuDF0VifLktlMhlZ -s Ypqb4GBpCI7fwwf9MIxLTLwFI4Yli01l -b sh-1302744707 -r ap-beijing';
+    'coscmd config -a AKIDHNCk12mEPJwINAhwub2B3ex0mGTP4RXN -s Zrsb4F9m7ByTjiQqzsTnpb5IDsGNDl34 -b sh-1302744707 -r ap-beijing';
   await exec(cos_config);
   const cos_upload = `coscmd upload -r ./dist/ /${version}`;
   await exec(cos_upload);
