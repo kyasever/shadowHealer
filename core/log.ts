@@ -65,6 +65,13 @@ function formatMsg(msg) {
   return msg;
 }
 
+/**
+ * log规范:
+ *    长久保留的log全部通过SHLog打印, 临时调试用的log用console打印.(便于使用后统一删除)
+ *    info以上级别用于打印频率低于 1s/条 的log
+ *    debug和log级别的不要使用额外的参数(带对象打印) error打印时尽可能把有关的对象都打印出来
+ *    debug级别建议增加[channel]字段便于调试使用
+ */
 export const SHLog = {
   debug: (msg, ...args) => {
     if (GameConfig.logLevel <= log_level.verbose) {
