@@ -1,10 +1,17 @@
-import cc from './character.json';
+import axios from 'axios';
+export * from './characterData';
 
-// 这里面静态保存json格式的游戏数据, 可以从这里初始化创建对象
-// 关卡配置可以用这个, skill buff character强行用这个就太蠢了...
-// 或者考虑灵活性, 不一定全json, 也可以用全js保存数据
-export function loadData(filename: string) {
-  console.log(cc);
-  //return cc;
-  return 1;
+/** 从本地资源文件中读取一个json */
+export async function loadFromJson<T>(name: string): Promise<T> {
+  const res = await axios({
+    method: 'get',
+    url: `./assets/data/${name}`,
+  }).catch((error) => {
+    console.error('get data failed', error);
+  });
+
+  if (res) {
+    return res['data'] as T;
+  }
+  return null;
 }

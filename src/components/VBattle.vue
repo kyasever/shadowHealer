@@ -2,7 +2,6 @@
 
 import Entity from './VEntity.vue'
 import { Battle, DeltaTime, GameConfig, IEntity } from '@core/common';
-import { loadData } from '@core/data'
 import { createBattle, custom1 } from './runner'
 import { ref } from 'vue';
 

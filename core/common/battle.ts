@@ -11,8 +11,6 @@ import {
 import { updateCharacters } from './systemCharacter';
 import { wait } from './utils';
 import { SHLog } from '../log';
-import { CharacterFactory } from '../characters';
-import { debug } from 'console';
 export class Battle {
   /** 所有场上存活的character, 引用可以保存在多个不同的容器里 */
   characters: IEntity[] = [];
@@ -39,7 +37,6 @@ export class Battle {
 
   constructor() {
     this.skada = new Skada(this);
-    CharacterFactory.battle = this;
   }
 
   init() {

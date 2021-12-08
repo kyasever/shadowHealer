@@ -5,11 +5,12 @@ import { SHLog } from '../core/log';
 import { debug, time } from 'console';
 import { Commander } from './commander';
 import {
-  CharacterFactory,
+  CharacterWizzard,
   createDead,
+  createEnemyBoss,
+  createEnemyStake,
   createTeamDPS,
 } from '../core/characters';
-import { loadData } from '../core/data';
 const program = new Commander();
 program
   .options('-t --time', 'time', 60)
@@ -17,15 +18,10 @@ program
   .options('--times', 'times', 1)
   .register('stake', stakeSim)
   .register('battle', battleSim)
-  .register('play', play)
-  .register('load', load);
+  .register('play', play);
 
 if (typeof process !== 'undefined' && process.argv.length > 2) {
   program.run();
-}
-
-async function load(file) {
-  return loadData(file);
 }
 
 export function run(cmd: string) {
@@ -40,8 +36,8 @@ export function stakeSim(options) {
 
   const battle = new Battle();
   battle.timeLimit = timeLimit;
-  battle.teams.push(CharacterFactory.wizzard());
-  battle.enemys.push(CharacterFactory.enemyStake());
+  battle.teams.push(new CharacterWizzard(battle));
+  battle.enemys.push(createEnemyStake(battle));
 
   battle.init();
 
@@ -80,14 +76,13 @@ export function battleSim(options) {
     const battle = new Battle();
     battle.timeLimit = timeLimit;
 
-    const c1 = CharacterFactory.wizzard();
-    const c2 = CharacterFactory.teamDPS('c2', 1000, 100);
-    const c3 = CharacterFactory.teamDPS('c3', 1000, 130);
-    const c4 = CharacterFactory.teamDPS('c4', 1000, 160);
-    const c5 = CharacterFactory.teamDPS('c5', 1000, 190);
+    const c1 = new CharacterWizzard(battle);
+    const c2 = createTeamDPS(battle, 'c2', 1000, 100);
+    const c3 = createTeamDPS(battle, 'c3', 1000, 130);
+    const c4 = createTeamDPS(battle, 'c4', 1000, 160);
+    const c5 = createTeamDPS(battle, 'c5', 1000, 190);
     battle.teams = [c1, c2, c3, c4, c5];
-    battle.enemys = [CharacterFactory.enemyBoss()];
-
+    battle.enemys = [createEnemyBoss(battle)];
     battle.init();
     battle.start();
     if (times === 1) {
@@ -120,7 +115,7 @@ export function play(options) {
   const c1 = createDead(battle);
   const c2 = createTeamDPS(battle, 'c2', 3000, 200);
   battle.teams = [c1, c2];
-  battle.enemys = [CharacterFactory.enemyBoss()];
+  battle.enemys = [createEnemyBoss(battle)];
 
   battle.init();
   battle.start();

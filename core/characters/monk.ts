@@ -1,10 +1,10 @@
 import { SHLog } from '@core/log';
 import { EFAULT } from 'constants';
-import { loadCharacterData } from '.';
+import { characterData } from '../data';
 import { createEntity, Battle, makeEffect, IBuff } from '../common';
 
 export function createEntityMonk(battle: Battle) {
-  const monkData = loadCharacterData('monk');
+  const monkData = characterData['monk'];
   const entity = createEntity(battle, monkData.name, {
     ...monkData.property,
   });

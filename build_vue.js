@@ -18,6 +18,7 @@ async function main(version) {
   console.log('step3 复制资源文件');
   await exec('cp -r ./assets ./dist');
   console.log('step4 准备coscmd');
+  // 虽然说官方准备了coscli, 但是还是二进制的,且分三个平台,没办法方便的集成进ci...
   try {
     await exec('coscmd');
   } catch (e) {
