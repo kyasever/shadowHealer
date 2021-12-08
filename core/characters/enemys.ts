@@ -1,4 +1,5 @@
-import { Battle, createEntity, IEntity, makeEffect } from '../common';
+import { createEntity } from '.';
+import { Battle, IEntity, makeEffect } from '../common';
 import { SHLog } from '../log';
 
 export function createEnemyStake(battle: Battle): IEntity {

@@ -1,7 +1,7 @@
 import { SHLog } from '@core/log';
+import { createEntity } from '.';
 import {
   Battle,
-  createEntity,
   DeltaTime,
   IEntity,
   makeEffect,

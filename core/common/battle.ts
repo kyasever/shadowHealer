@@ -21,6 +21,9 @@ export class Battle {
   // 敌人
   enemys: IEntity[] = [];
 
+  // 主要目标
+  coreTarget: IEntity;
+
   time: number = 0;
 
   timeLimit: number;

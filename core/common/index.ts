@@ -35,35 +35,6 @@ export interface IEntityProperty {
   attackInterval?: number;
 }
 
-// 返回一个默认的空Entity
-export function createEntity(
-  battle: Battle,
-  name: string,
-  property: IEntityProperty,
-  entity?: any
-): IEntity {
-  if (!entity) {
-    entity = {};
-  }
-  entity.name = name;
-  entity.battle = battle;
-  entity.buffs = {};
-  entity.property = property;
-  calculateProperty(entity);
-  entity.hp = entity.hpmax;
-  entity.ap = entity.apmax;
-  entity.sheild = 0;
-  entity.isAlive = true;
-  if (!entity.skills) {
-    entity.skills = [];
-  }
-  if (!entity.attackInterval) {
-    entity.attackInterval = 1;
-  }
-  entity.attackRelease = Math.random() * 1;
-  return entity;
-}
-
 export interface IEntity {
   battle: Battle;
   // 基础属性
@@ -73,6 +44,8 @@ export interface IEntity {
   ap: number;
   sheild: number;
   attackRelease: number;
+  // ai和ui使用,决定目标
+  target?: IEntity;
   // 原始属性
   property: IEntityProperty;
   // 由calculateProperty赋值,不允许手动更改
@@ -90,21 +63,23 @@ export interface IEntity {
   afterEffect?: (effect: IEffect) => any;
   afterBehit?: (effect: IEffect) => any;
   // action & 生命周期
-  // 模式1: 每帧精确控制做什么
+  // 每帧触发
   onUpdate?: () => any;
-  // 模式2: 直到轮到自己行动时控制自己做什么
 
-  /** 按照列表检索,顺序为优先级 */
-  skills?: ISkill[];
-  // 重载这个, 说明要求不高, 只在轮到attack时触发, 其他逻辑托管给系统
+  /** 技能 */
+  skills?: { [key: string]: ISkill };
+
+  // 当attackRelease走完时触发
   onAttack?: () => any;
+
+  [key: string]: any;
 }
 
 export interface ISkill {
   // caster 本质上是effect需要的, apcost也应该属于effect
   name: string;
-  // apcost 应该属于effect, 这里加一个字段用于指示ai
-  apNeed?: number;
+  // 原则上来讲应该等于onUse中实际的开销, 主要通过这个来指示一个技能是否可用
+  ap_caster?: number;
   cd?: number;
   cdRelease?: number;
   custom?: any;
@@ -113,8 +88,9 @@ export interface ISkill {
 
 export interface IBuff {
   name: string;
-  target: IEntity;
-  caster: IEntity;
+  // 可以添加的时候增加, 反正自己也没权限加buff了.
+  target?: IEntity;
+  caster?: IEntity;
   // 重复添加buff 取剩余时间更多的一个. undefined 表示无限持续
   release?: number;
   // 层数
@@ -147,7 +123,7 @@ export interface IEffect {
 
   // 对target造成伤害(相对于hp变化取反)
   damage?: number;
-  // 对target造成治疗
+  // 对target造成治疗, 负治疗也会算作治疗,但不会致死
   heal?: number;
   // 对caster改变ap
   ap_caster?: number;
