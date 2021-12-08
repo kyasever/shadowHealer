@@ -35,9 +35,6 @@ function runBattle() {
   battle.start()
 }
 
-function output() {
-  battle?.skada.outPut('monk')
-}
 
 
 const items = ref<Array<IEntity>>()
@@ -53,7 +50,6 @@ const items = ref<Array<IEntity>>()
     <van-button class="btn" @click="loadPlayground" plain type="primary">startPlayground</van-button>
     <van-button class="btn" @click="loadBattle" plain type="primary">startBattle</van-button>
     <van-button class="btn" @click="runBattle" plain type="primary">runBattle</van-button>
-    <van-button class="btn" @click="output" plain type="primary">outputSkada</van-button>
   </div>
   <ul id="array-rendering">
     <li v-for="entity in items">

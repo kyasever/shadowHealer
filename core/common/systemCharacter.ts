@@ -24,6 +24,7 @@ export function updateCharacters(battle: Battle) {
         }
       }
     });
+
     battle.skada.addBuffData(c);
 
     if (!c.attackRelease) {
@@ -33,6 +34,12 @@ export function updateCharacters(battle: Battle) {
     c.attackRelease -= DeltaTime;
     if (c.attackRelease <= 0) {
       c.attackRelease = c.attackInterval;
+      Object.values(c.skills).forEach((skill) => {
+        if (!skill.cdRelease) {
+          skill.cdRelease = 0;
+        }
+        skill.cdRelease -= 1;
+      });
       c.onAttack && c.onAttack();
     }
   });

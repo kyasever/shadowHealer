@@ -62,7 +62,7 @@ export function createCharacterWizzard(battle) {
   skillFinal.onUse = () => {
     makeEffect({
       caster: entity,
-      target: entity.battle.enemys[0],
+      target: entity.target,
       name: 'Final',
       ap_caster: -entity.apmax,
       damage: entity.attack * 3,

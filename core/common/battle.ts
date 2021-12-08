@@ -44,6 +44,7 @@ export class Battle {
 
   init() {
     this.characters = [...this.teams, ...this.enemys];
+    this.coreTarget = this.enemys[0];
   }
 
   FPSTimeStart = 0;

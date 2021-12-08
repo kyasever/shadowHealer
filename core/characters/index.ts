@@ -3,6 +3,7 @@ export * from './fire';
 export * from './teams';
 export * from './monk';
 
+import { SHLog } from '@core/log';
 import axios from 'axios';
 import {
   Battle,
@@ -37,6 +38,7 @@ export interface IDataEntity {
   // TODO: skills本身就应该用dic, 另外加入字段作为优先级. 取消onattack, 只保留技能
   skills?: (Partial<IEffect> &
     ISkill & { custom?: any; damageScale?: number })[];
+  skillPriority?: string[];
   [key: string]: any;
 }
 
@@ -68,6 +70,7 @@ export function createEntity(
 // 从data创建一个对象
 export function createEntityFromData(battle, data: IDataEntity): IEntity {
   const entity = createEntity(battle, data.name, data.property);
+  entity.skillPriority = data.skillPriority;
   if (data.skills) {
     data.skills.forEach((skillData) => {
       const skill: ISkill = {
@@ -80,8 +83,13 @@ export function createEntityFromData(battle, data: IDataEntity): IEntity {
       // 标注custom就不帮忙创建了, 自己搞吧
       if (!skillData.custom) {
         skill.onUse = () => {
-          const damage =
-            skillData.damage + entity.attack * skillData.damageScale;
+          let damage = 0;
+          if (skillData.damageScale) {
+            damage += entity.attack * skillData.damageScale;
+          }
+          if (skillData.damage) {
+            damage += skillData.damage;
+          }
           makeEffect({
             caster: entity,
             target: entity.target,
@@ -94,5 +102,42 @@ export function createEntityFromData(battle, data: IDataEntity): IEntity {
       entity.skills[skillData.name] = skill;
     });
   }
+
+  if (entity.skillPriority) {
+    entity.onAttack = () => {
+      entity.target = entity.battle.coreTarget;
+      let hasUsedSkill = false;
+      for (let i = 0; i < entity.skillPriority.length; i++) {
+        const skill = entity.skills[entity.skillPriority[i]];
+        if (!skill) {
+          SHLog.error(
+            `skillPriority not inclued skill:${entity.skillPriority[i]}`,
+            skill
+          );
+          break;
+        }
+        if (canUseSkill(entity, skill)) {
+          hasUsedSkill = true;
+          skill.onUse && skill.onUse();
+          skill.cdRelease = skill.cd;
+          SHLog.info(`${entity.name} used skill ${skill.name}`);
+          break;
+        }
+      }
+      if (!hasUsedSkill) {
+        SHLog.error(`${entity.name} not have skill to use`);
+      }
+    };
+  }
   return entity;
+}
+
+export function canUseSkill(entity: IEntity, skill: ISkill) {
+  if (skill.ap_caster && entity.ap < -skill.ap_caster) {
+    return false;
+  }
+  if (skill.cdRelease > 0) {
+    return false;
+  }
+  return true;
 }

@@ -15,6 +15,7 @@ export const characterData: { [key: string]: IDataEntity } = {
       critDamage: 2,
       attackInterval: 1.5,
     },
+    skillPriority: ['skill6', 'skill5', 'skill3', 'skill4', 'skill2', 'skill1'],
     skills: [
       {
         name: 'skill1',
@@ -68,6 +69,7 @@ export const characterData: { [key: string]: IDataEntity } = {
       critRate: 0.2,
       critDamage: 2,
     },
+    skillPriority: ['final', 'B', 'A', 'normal'],
     skills: [
       {
         name: 'normal',

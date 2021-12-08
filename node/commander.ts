@@ -1,3 +1,5 @@
+import { SHLog } from '@core/log';
+
 export class Commander {
   callbacks = {};
   keywords_key = {};
@@ -33,7 +35,7 @@ export class Commander {
     const params = [...this.defaultParams];
     const options = { ...this.defaultOptions };
     let hasSetOptions = false;
-    console.log(args);
+    SHLog.info(args);
     for (let i = 0; i < args.length; i++) {
       const p = args[i];
       if (p[0] === '-') {
@@ -63,7 +65,7 @@ export class Commander {
 
   async run(cmd?: string | string[]) {
     const [options, params] = this.parse(cmd);
-    console.log(options, params);
+    SHLog.info(options, params);
     if (params.length === 0 && !this.callbacks['default']) {
       console.error('至少需要注册一个回调');
       return;
@@ -79,8 +81,7 @@ export class Commander {
 
     if (typeof window !== 'undefined') {
       let memory = (window.performance as any).memory;
-      // console.log(memory);
-      console.log(
+      SHLog.info(
         `memory used: ${(memory.totalJSHeapSize / 1000000).toFixed(2)}mb`
       );
     }

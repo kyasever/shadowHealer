@@ -40,6 +40,9 @@ export function makeEffect(effect: IEffect, time?: number) {
  */
 export function _dealEffect(effect: IEffect) {
   const { caster, target } = effect;
+  if (!caster || !target) {
+    SHLog.error('not fond target');
+  }
   effect.time = caster.battle.time;
   effect.critRate = effect.critRate || caster.critRate;
   effect.critDamage = effect.critDamage || caster.critDamage;
@@ -54,8 +57,7 @@ export function _dealEffect(effect: IEffect) {
   // ----- 回调处理阶段 -----
   const call = (obj, eventName: string) => {
     if (!obj) {
-      SHLog.error(`effect entity not fond`);
-      console.log(effect);
+      SHLog.error(`effect entity not fond`, effect);
       return;
     }
     if (obj[eventName]) {
@@ -119,9 +121,11 @@ export function _dealEffect(effect: IEffect) {
 
   if (effect.addBuff) {
     const buff = effect.addBuff;
-    const oldBuff = buff.target.buffs[buff.name];
-    if (!buff.target.buffs[buff.name]) {
-      buff.target.buffs[buff.name] = { ...buff };
+    buff.caster = caster;
+    buff.target = target;
+    const oldBuff = target.buffs[buff.name];
+    if (!target.buffs[buff.name]) {
+      target.buffs[buff.name] = { ...buff };
     } else {
       // 结算堆叠层数
       if (oldBuff.maxStack) {

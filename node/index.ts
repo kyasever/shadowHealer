@@ -48,9 +48,7 @@ export function stakeSim(options) {
   battle.onUpdate = () => {
     if (battle.time > target) {
       const timeDuring = ((new Date().getTime() - timeStart) / 1000).toFixed(2);
-      console.log(
-        `(${timeDuring}s)running: ${battle.time}/${battle.timeLimit}`
-      );
+      SHLog.info(`(${timeDuring}s)running: ${battle.time}/${battle.timeLimit}`);
       target += step;
     }
   };
@@ -72,7 +70,7 @@ export function battleSim(options) {
 
   const results = {};
   for (let i = 0; i < times; i++) {
-    console.log(`times ${i}`);
+    SHLog.info(`times ${i}`);
     const battle = new Battle();
     battle.timeLimit = timeLimit;
 
@@ -88,7 +86,7 @@ export function battleSim(options) {
     if (times === 1) {
       battle.skada.outPut(options.target);
     } else {
-      console.log(battle.gameResult);
+      SHLog.info(battle.gameResult);
     }
 
     if (!results[battle.gameResult]) {
@@ -97,8 +95,8 @@ export function battleSim(options) {
     results[battle.gameResult]++;
   }
   if (times !== 1) {
-    console.log('all sim end');
-    console.table(results);
+    SHLog.info('all sim end');
+    SHLog.table(results, 3);
   }
 
   return results;

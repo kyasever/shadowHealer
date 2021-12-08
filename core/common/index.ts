@@ -68,6 +68,8 @@ export interface IEntity {
 
   /** 技能 */
   skills?: { [key: string]: ISkill };
+  /** 技能释放优先级, 默认AI */
+  skillPriority?: string[];
 
   // 当attackRelease走完时触发
   onAttack?: () => any;
