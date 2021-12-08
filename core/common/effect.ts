@@ -51,7 +51,6 @@ export function _dealEffect(effect: IEffect) {
   const log = (msg) => {
     effect.logs.push(msg);
   };
-
   // ----- 回调处理阶段 -----
   const call = (obj, eventName: string) => {
     if (!obj) {

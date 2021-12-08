@@ -66,33 +66,33 @@ function formatMsg(msg) {
 }
 
 export const SHLog = {
-  debug: (msg) => {
+  debug: (msg, ...args) => {
     if (GameConfig.logLevel <= log_level.verbose) {
-      console.debug(setPrototypeColor(formatMsg(msg), 'grey'));
+      console.debug(setPrototypeColor(formatMsg(msg), 'grey'), ...args);
     }
   },
 
-  log: (msg) => {
+  log: (msg, ...args) => {
     if (GameConfig.logLevel <= log_level.debug) {
-      console.log(formatMsg(msg));
+      console.log(formatMsg(msg), ...args);
     }
   },
 
-  info: (msg) => {
+  info: (msg, ...args) => {
     if (GameConfig.logLevel <= log_level.info) {
-      console.info(setPrototypeColor(formatMsg(msg), 'green'));
+      console.info(setPrototypeColor(formatMsg(msg), 'green'), ...args);
     }
   },
 
-  warn: (msg) => {
+  warn: (msg, ...args) => {
     if (GameConfig.logLevel <= log_level.warn) {
-      console.warn(setPrototypeColor(formatMsg(msg), 'yellow'));
+      console.warn(setPrototypeColor(formatMsg(msg), 'yellow'), ...args);
     }
   },
 
-  error: (msg) => {
+  error: (msg, ...args) => {
     if (GameConfig.logLevel <= log_level.error) {
-      console.error(setPrototypeColor(formatMsg(msg), 'red'));
+      console.error(setPrototypeColor(formatMsg(msg), 'red'), ...args);
     }
   },
 

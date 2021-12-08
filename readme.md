@@ -11,7 +11,7 @@ vscode 安装插件
 1. 安装: node npm yarn (略)
 2. yarn 安装依赖
 3. yarn dev 开启 vue 调试, chrome 访问 http://localhost:3000/ 即可开始调试.
-4. yarn publish-vue <version> 以指定版本号发布
+4. yarn publish-vue \<version\> 以指定版本号发布
 
 ## tips
 
@@ -32,7 +32,6 @@ src/main.ts 是程序的主入口
 - [phaser-startup](http://phaser.io/tutorials/making-your-first-phaser-3-game-chinese)
 - [phaser-demo](https://github.com/photonstorm/phaser3-examples)
 - [tilemap-demo](https://blog.ourcade.co/posts/2020/phaser3-mrpas-fov-field-of-view-algorithm-roguelike-dungeon-crawler/)
-
 - [vite](https://vitejs.cn/guide/)
 - [vue3](https://v3.cn.vuejs.org/guide/introduction.html)
 - [vant](https://vant-contrib.gitee.io/vant/v3/#/zh-CN)
