@@ -20,7 +20,7 @@
   ],
   "dependencies": {
     "axios": "^0.24.0",
-    "node-localstorage": "^2.2.1",
+    "events": "^3.3.0",
     "phaser": "^3.55.2",
     "vant": "3",
     "vue": "^3.2.16"

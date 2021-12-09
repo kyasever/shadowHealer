@@ -104,3 +104,4 @@ coverage/
 result/*
 save.tar.gz
 output.tar.gz
+.VSCodeCounter/*

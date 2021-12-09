@@ -1,3 +1,4 @@
+import { EventEmitter } from 'stream';
 import { Battle } from './battle';
 import { calculateProperty } from './property';
 
@@ -58,6 +59,8 @@ export interface IEntity {
   attackInterval?: number;
   // buff & 生命周期
   buffs: { [key: string]: IBuff };
+  /** 事件分发器, 回调以后全靠这个分发了. */
+  eventEmitter: EventEmitter;
   onEffect?: (effect: IEffect) => any;
   onBehit?: (effect: IEffect) => any;
   afterEffect?: (effect: IEffect) => any;

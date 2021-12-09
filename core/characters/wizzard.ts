@@ -16,7 +16,7 @@ import { characterData } from '@core/data';
 import { createEntityFromData } from '.';
 import { makeEffect, IEffect, IBuff } from '../common';
 
-export function createCharacterWizzard(battle) {
+export function createEntityWizzard(battle) {
   const entity = createEntityFromData(battle, characterData.wizzard);
 
   entity.cycleChange = 0.2;

@@ -3,6 +3,7 @@ import App from './App.vue';
 import { run } from '../node/index';
 import { Button, Switch, Slider, Tab, Tabs } from 'vant';
 import { createPhaser } from '../phaser';
+import { EventEmitter } from 'events';
 
 declare const window: any;
 
@@ -23,3 +24,12 @@ window.run = (command) => {
 };
 
 createPhaser('#glcanvas');
+
+const emit = new EventEmitter();
+
+emit.on('a', (res) => {
+  console.log('a', res);
+});
+
+emit.emit('a');
+emit.emit('a', 'arg1', 'arg2');

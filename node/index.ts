@@ -5,7 +5,7 @@ import { SHLog } from '../core/log';
 import { debug, time } from 'console';
 import { Commander } from './commander';
 import {
-  createCharacterWizzard,
+  createEntityWizzard,
   createDead,
   createEnemyBoss,
   createEnemyStake,
@@ -36,7 +36,7 @@ export function stakeSim(options) {
 
   const battle = new Battle();
   battle.timeLimit = timeLimit;
-  battle.teams.push(createCharacterWizzard(battle));
+  battle.teams.push(createEntityWizzard(battle));
   battle.enemys.push(createEnemyStake(battle));
 
   battle.init();
@@ -74,7 +74,7 @@ export function battleSim(options) {
     const battle = new Battle();
     battle.timeLimit = timeLimit;
 
-    const c1 = createCharacterWizzard(battle);
+    const c1 = createEntityWizzard(battle);
     const c2 = createTeamDPS(battle, 'c2', 1000, 100);
     const c3 = createTeamDPS(battle, 'c3', 1000, 130);
     const c4 = createTeamDPS(battle, 'c4', 1000, 160);

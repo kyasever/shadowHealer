@@ -1,10 +1,11 @@
 export * from './enemys';
-export * from './fire';
+export * from './wizzard';
 export * from './teams';
 export * from './monk';
 
 import { SHLog } from '@core/log';
 import axios from 'axios';
+import { EventEmitter } from 'stream';
 import {
   Battle,
   calculateProperty,
@@ -15,6 +16,8 @@ import {
   ISkill,
   makeEffect,
 } from '../common';
+import { createEntityMonk } from './monk';
+import { createEntityWizzard } from './wizzard';
 
 /** 从本地资源文件中读取一个json */
 export async function loadFromJson<T>(name: string): Promise<T> {
@@ -31,11 +34,23 @@ export async function loadFromJson<T>(name: string): Promise<T> {
   return null;
 }
 
+const map_create: { [key: string]: (battle: Battle) => IEntity } = {
+  wizzard: createEntityWizzard,
+  monk: createEntityMonk,
+};
+
+export function createEntityFromName(battle, name) {
+  if (map_create[name]) {
+    return map_create[name](battle);
+  } else {
+    SHLog.error(`createEntityFromName not found name: ${name}`);
+  }
+}
+
 export interface IDataEntity {
   name: string;
   property: IEntityProperty;
   // skill需要的字段会默认放进skill, 如果没有custom, 则使用时只有一个effect, 如果有,则自定义
-  // TODO: skills本身就应该用dic, 另外加入字段作为优先级. 取消onattack, 只保留技能
   skills?: (Partial<IEffect> &
     ISkill & { custom?: any; damageScale?: number })[];
   skillPriority?: string[];
@@ -60,6 +75,7 @@ export function createEntity(
     buffs: {},
     skills: {},
     attackRelease: Math.random() * 1,
+    eventEmitter: new EventEmitter(),
   };
   calculateProperty(entity);
   entity.hp = entity.hpmax;

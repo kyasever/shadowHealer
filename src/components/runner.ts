@@ -1,6 +1,6 @@
 import {
   createDead,
-  createCharacterWizzard,
+  createEntityWizzard,
   createEnemyBoss,
   createEnemyStake,
   createEntityMonk,
@@ -10,7 +10,7 @@ import { Battle, GameConfig } from '@core/common';
 
 export function createBattle(): Battle {
   const battle = new Battle();
-  const c1 = createCharacterWizzard(battle);
+  const c1 = createEntityWizzard(battle);
   const c2 = createTeamDPS(battle, 'c2', 1000, 100);
   const c3 = createTeamDPS(battle, 'c3', 1000, 130);
   const c4 = createTeamDPS(battle, 'c4', 1000, 160);

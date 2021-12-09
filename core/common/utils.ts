@@ -6,7 +6,8 @@ export function randomRange(min: number, max: number) {
   return min + Math.random() * dis;
 }
 
-export function changeHp(target: IEntity, value: number) {
+/** 改变一个对象的hp, 返回实际改变的值 */
+export function changeHp(target: IEntity, value: number): number {
   value = Math.round(value);
   let end = target.hp + value;
   if (end > target.hpmax) {
@@ -30,6 +31,7 @@ export function changeHp(target: IEntity, value: number) {
   return changed;
 }
 
+/** 改变一个对象的ap, 返回实际改变的值  */
 export function changeAp(target: IEntity, value: number) {
   value = Math.round(value);
   let end = target.ap + value;
