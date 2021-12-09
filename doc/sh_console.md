@@ -54,7 +54,9 @@ beta1.4- 12.10?
 - 虽然增加 json 的读取 SOP,但是 json 编辑起来不太友好,考虑还是用 ts 来写伪 json 会合适一点...
 - 去掉 nodejs 的兼容性支持, 接下来只支持 vue 版本. log 只兼容 vue
 
-* 用 EventEmitter 重构所有事件...
+* 用 EventEmitter 重构所有事件... 将几个核心对象重构为 class, 重构代码依赖结构
+* define -> battle -> entitys -> create -> vue
+* ---
 * dps 控制器，ui 指定下一个技能用什么。 技能 cd 改成基于实际时间。
 * UI 做成血条背景。 文字显示。 有一个详情键
 * useskill 这里应该重做. 将其变为一个公共方法
