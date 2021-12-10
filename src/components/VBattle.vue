@@ -11,17 +11,18 @@ const fps = ref('0')
 let battle: Battle
 GameConfig.speed = 0.01
 
+const items = ref<Array<IEntity>>()
 function startBattle(b) {
   battle = b;
   battle.on('update', () => {
     time.value = battle.time.toFixed(2)
     fps.value = battle.FPS.toFixed(2)
     items.value = {
-      ...battle.entitys
+      ...battle.entitys as any
     }
   })
   items.value = {
-    ...battle.entitys
+    ...battle.entitys as any
   }
 }
 
@@ -38,7 +39,7 @@ function runBattle() {
 
 
 
-const items = ref<Array<Entity>>()
+
 
 </script>
 
@@ -55,7 +56,7 @@ const items = ref<Array<Entity>>()
   <ul id="array-rendering">
     <li v-for="entity in items">
       <!-- 这样来让子组件认为,每次更新都是一个新的Entity.. -->
-      <VEntity :entity="{ ...entity as IEntity }"></VEntity>
+      <VEntity :entity="{ ...entity }"></VEntity>
     </li>
   </ul>
 </template>

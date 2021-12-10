@@ -68,6 +68,9 @@ export class Entity {
   /** 技能释放优先级, 默认AI */
   skillPriority?: string[];
 
+  /** addBuff中 buff只传递key, 实例要从这里面拿 */
+  buffCreater: { [key: string]: () => Buff };
+
   _eventEmitter: EventEmitter;
 
   constructor(battle: Battle, name, property) {
