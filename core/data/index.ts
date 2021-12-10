@@ -17,6 +17,6 @@ export interface IDataEntity {
   [key: string]: any;
 }
 
-export function getCharacterData() {
+export function loadCharacterData() {
   return characterData;
 }

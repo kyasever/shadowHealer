@@ -1,9 +1,9 @@
 import { Battle, Buff, createEntityFromData, makeEffect } from '../battle';
-import { getCharacterData } from '../data';
+import { loadCharacterData } from '../data';
 import { SHLog } from '../utils';
 
 export function createEntityMonk(battle: Battle) {
-  const monkData = getCharacterData['monk'];
+  const monkData = loadCharacterData['monk'];
   const entity = createEntityFromData(battle, monkData);
 
   let cantAttack = 0;

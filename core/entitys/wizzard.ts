@@ -13,10 +13,10 @@
 */
 
 import { Buff, createEntityFromData, IEffect, makeEffect } from '../battle';
-import { getCharacterData } from '../data';
+import { loadCharacterData } from '../data';
 
 export function createEntityWizzard(battle) {
-  const entity = createEntityFromData(battle, getCharacterData().wizzard);
+  const entity = createEntityFromData(battle, loadCharacterData().wizzard);
 
   entity.custom.cycleChange = 0.2;
   entity.on('effect', (effect) => {

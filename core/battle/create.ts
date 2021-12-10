@@ -1,41 +1,17 @@
-import axios from 'axios';
 import { Battle, Skill, makeEffect } from '.';
 import { IDataEntity } from '../data';
-import { createEntityWizzard, createEntityMonk } from '../entitys';
 import { SHLog } from '../utils';
 import { Entity } from './entity';
 
-/** 从本地资源文件中读取一个json */
-export async function loadFromJson<T>(name: string): Promise<T> {
-  const res = await axios({
-    method: 'get',
-    url: `./assets/data/${name}`,
-  }).catch((error) => {
-    console.error('get data failed', error);
-  });
-
-  if (res) {
-    return res['data'] as T;
-  }
-  return null;
-}
-
-const map_create: { [key: string]: (battle: Battle) => Entity } = {
-  wizzard: createEntityWizzard,
-  monk: createEntityMonk,
-};
-
-export function createEntityFromName(battle, name) {
-  if (map_create[name]) {
-    return map_create[name](battle);
-  } else {
-    SHLog.error(`createEntityFromName not found name: ${name}`);
-  }
-}
-
 // 从data创建一个对象
 export function createEntityFromData(battle, data: IDataEntity): Entity {
+  if (!data) {
+    SHLog.error(`未传入data,无法创建`);
+    return null;
+  }
+
   const entity = new Entity(battle, data.name, data.property);
+
   entity.skillPriority = data.skillPriority;
   if (data.skills) {
     data.skills.forEach((skillData) => {

@@ -1,22 +1,16 @@
+import { SHInterface } from '@core/utils';
 import { EventEmitter } from 'events';
 import { Callback } from 'vant/lib/lazyload/vue-lazyload';
-
-export class ISkill {
-  // caster 本质上是effect需要的, apcost也应该属于effect
-  name: string;
-  // 原则上来讲应该等于onUse中实际的开销, 主要通过这个来指示一个技能是否可用
-  ap_caster?: number;
-  cd?: number;
-  cdRelease?: number;
-  custom?: any;
-}
 
 type EventType =
   | { event: 'use'; param: void }
   | { event: 'canUse'; param: void };
 
-export class Skill implements ISkill {
+export type ISkill = SHInterface<Skill>;
+export class Skill {
+  // caster 本质上是effect需要的, apcost也应该属于effect
   name: string;
+  // 原则上来讲应该等于onUse中实际的开销, 主要通过这个来指示一个技能是否可用
   ap_caster?: number;
   cd?: number;
   cdRelease?: number;

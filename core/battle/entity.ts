@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
+import { FunctionKeys, NonFunctionKeys } from 'utility-types';
 import { DeltaTime } from '../game';
-import { SHLog } from '../utils';
+import { SHInterface, SHLog } from '../utils';
 import { Battle } from './battle';
 import { Buff } from './buff';
 import { IEffect, makeEffect } from './efffect';
@@ -27,7 +28,18 @@ export interface IEntityProperty {
   attackInterval?: number;
 }
 
-export interface IEntity {
+type EventType =
+  | { event: 'effect'; param: IEffect }
+  | { event: 'behit'; param: IEffect }
+  | { event: 'afterEffect'; param: IEffect }
+  | { event: 'afterBehit'; param: IEffect }
+  | { event: 'update'; param: void }
+  | { event: 'attack'; param: void }
+  | { event: 'calculateProperty'; param: IEntityProperty };
+
+export type IEntity = SHInterface<Entity>;
+
+export class Entity {
   battle: Battle;
   // 基础属性
   name: string;
@@ -55,18 +67,7 @@ export interface IEntity {
   skills?: { [key: string]: Skill };
   /** 技能释放优先级, 默认AI */
   skillPriority?: string[];
-}
 
-type EventType =
-  | { event: 'effect'; param: IEffect }
-  | { event: 'behit'; param: IEffect }
-  | { event: 'afterEffect'; param: IEffect }
-  | { event: 'afterBehit'; param: IEffect }
-  | { event: 'update'; param: void }
-  | { event: 'attack'; param: void }
-  | { event: 'calculateProperty'; param: IEntityProperty };
-
-export class Entity implements IEntity {
   _eventEmitter: EventEmitter;
 
   constructor(battle: Battle, name, property) {
@@ -87,26 +88,6 @@ export class Entity implements IEntity {
     this.hp = this.hpmax;
     this.ap = this.apmax;
   }
-  battle: Battle;
-  name: string;
-  isAlive: boolean;
-  hp: number;
-  ap: number;
-  sheild: number;
-  attackRelease: number;
-  target?: Entity;
-  property: IEntityProperty;
-  sheildMax?: number;
-  attack?: number;
-  hpmax?: number;
-  apmax?: number;
-  critRate?: number;
-  critDamage?: number;
-  attackInterval?: number;
-  buffs: { [key: string]: Buff };
-  custom: { [key: string]: any };
-  skills?: { [key: string]: Skill };
-  skillPriority?: string[];
 
   on<T extends EventType['event']>(
     event: T,

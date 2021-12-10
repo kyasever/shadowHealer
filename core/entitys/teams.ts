@@ -1,25 +1,22 @@
-import { Battle, Entity, makeEffect } from '../battle';
+import { IDataEntity } from '@core/data';
+import { Battle, createEntityFromData, Entity, makeEffect } from '../battle';
 import { DeltaTime } from '../game';
-import { SHLog } from '../utils';
+import { randomRange, randomString, SHLog } from '../utils';
 
-export function randomRange(min: number, max: number) {
-  let dis = max - min;
-  return min + Math.random() * dis;
-}
+export function createTeamDPS(battle: Battle, data: IDataEntity): Entity {
+  let dps = randomRange(100, 300);
+  let _data: IDataEntity = data || {
+    name: 'c_' + dps.toString(),
+    property: {
+      hpmax: 1000,
+      apmax: 100,
+      attack: dps,
+      critRate: 0.2,
+      critDamage: 2,
+    },
+  };
 
-export function createTeamDPS(
-  battle: Battle,
-  name: string,
-  hp: number,
-  attack: number
-): Entity {
-  const character: Entity = new Entity(battle, name, {
-    hpmax: hp,
-    apmax: 100,
-    attack: attack,
-    critRate: 0.2,
-    critDamage: 2,
-  });
+  const character: Entity = createEntityFromData(battle, _data);
   character.on('attack', () => {
     const damage = character.attack * randomRange(0.8, 1.2);
     makeEffect({
@@ -33,8 +30,30 @@ export function createTeamDPS(
 }
 
 // deadman 亡灵武士, 死亡后10s复活, 恢复50%生命
-export function createDead(battle): Entity {
-  const character = createTeamDPS(battle, 'deadman', 3500, 50);
+export function createDead(battle, data): Entity {
+  let _data: IDataEntity = data || {
+    name: 'dead',
+    property: {
+      hpmax: 3500,
+      apmax: 100,
+      attack: 50,
+      critRate: 0.2,
+      critDamage: 2,
+    },
+  };
+
+  const character = createEntityFromData(battle, _data);
+
+  character.on('attack', () => {
+    const damage = character.attack * randomRange(0.8, 1.2);
+    makeEffect({
+      caster: character,
+      name: `normal`,
+      target: battle.enemys[0],
+      damage,
+    });
+  });
+
   let timeDeadth = 0;
   character.on('update', () => {
     if (!character.isAlive) {
@@ -53,11 +72,5 @@ export function createDead(battle): Entity {
       }
     }
   });
-  return character;
-}
-
-export function createRaven(battle): Entity {
-  const character = createTeamDPS(battle, 'caller', 1000, 120);
-
   return character;
 }
