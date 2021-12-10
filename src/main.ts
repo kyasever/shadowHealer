@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import { run } from '../node/index';
+import { run } from '@core/commander';
 import { Button, Switch, Slider, Tab, Tabs } from 'vant';
 import { createPhaser } from '../phaser';
 import { EventEmitter } from 'events';

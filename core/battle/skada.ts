@@ -1,6 +1,40 @@
-import { SHLog } from '@core/log';
-import { Battle, IEntity, DeltaTime, IEffect } from '.';
-import { SHMap } from './SHMap';
+import { DeltaTime } from '../game';
+import { SHLog } from '../utils';
+import { Battle } from './battle';
+import { IEffect } from './efffect';
+import { Entity } from './entity';
+
+/** 和一般对象不同的地方在于, 初始化的时候指定了一个空默认值, 从而get不会取空 */
+export class SHMap<T> {
+  _getDefault;
+
+  constructor(_getEmpty: () => T) {
+    this._getDefault = _getEmpty;
+  }
+
+  get(key: string): T {
+    if (!this[key]) {
+      this[key] = this._getDefault();
+    }
+    return this[key];
+  }
+
+  set(key: string, value: T) {
+    this[key] = value;
+  }
+
+  delete(key: string) {
+    delete this[key];
+  }
+
+  forEach(callback: (key: string, value: T) => void) {
+    Object.keys(this).forEach((key) => {
+      if (key !== '_getDefault') {
+        callback(key, this[key]);
+      }
+    });
+  }
+}
 
 interface SkadaData {
   totalDamage: number;
@@ -81,7 +115,7 @@ export class Skada {
   }
 
   // 每帧记录, 如果有这个buff,则count + 1最终得出buff覆盖率
-  addBuffData(c: IEntity) {
+  addBuffData(c: Entity) {
     Object.keys(c.buffs).forEach((key) => {
       let b = this.data.get(c.name).buffCoverage;
       if (!b[c.buffs[key].name]) {
@@ -132,7 +166,5 @@ export class Skada {
       });
       console.table(sortedBuff);
     }
-
-    console.log(`effect count: ${this.battle.effectCalled.length}`);
   }
 }

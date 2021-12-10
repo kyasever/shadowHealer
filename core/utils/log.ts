@@ -1,4 +1,4 @@
-import { GameConfig } from './common';
+import { GameConfig } from '../game';
 
 export type ConsoleStyles = keyof IStyles;
 
@@ -93,13 +93,13 @@ export const SHLog = {
 
   warn: (msg, ...args) => {
     if (GameConfig.logLevel <= log_level.warn) {
-      console.warn(setPrototypeColor(formatMsg(msg), 'yellow'), ...args);
+      console.warn(formatMsg(msg), ...args);
     }
   },
 
   error: (msg, ...args) => {
     if (GameConfig.logLevel <= log_level.error) {
-      console.error(setPrototypeColor(formatMsg(msg), 'red'), ...args);
+      console.error(formatMsg(msg), ...args);
     }
   },
 

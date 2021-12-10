@@ -1,4 +1,4 @@
-import { SHLog } from '@core/log';
+import { SHLog } from '../utils';
 
 export class Commander {
   callbacks = {};

@@ -1,28 +1,26 @@
-import { SHLog } from '@core/log';
-import { createEntity } from '.';
-import {
-  Battle,
-  DeltaTime,
-  IEntity,
-  makeEffect,
-  MakeEffectInstance,
-} from '../common';
-import { randomRange } from '../common/utils';
+import { Battle, Entity, makeEffect } from '../battle';
+import { DeltaTime } from '../game';
+import { SHLog } from '../utils';
+
+export function randomRange(min: number, max: number) {
+  let dis = max - min;
+  return min + Math.random() * dis;
+}
 
 export function createTeamDPS(
   battle: Battle,
   name: string,
   hp: number,
   attack: number
-): IEntity {
-  const character: IEntity = createEntity(battle, name, {
+): Entity {
+  const character: Entity = new Entity(battle, name, {
     hpmax: hp,
     apmax: 100,
     attack: attack,
     critRate: 0.2,
     critDamage: 2,
   });
-  character.onAttack = () => {
+  character.on('attack', () => {
     const damage = character.attack * randomRange(0.8, 1.2);
     makeEffect({
       caster: character,
@@ -30,15 +28,15 @@ export function createTeamDPS(
       target: battle.enemys[0],
       damage,
     });
-  };
+  });
   return character;
 }
 
 // deadman 亡灵武士, 死亡后10s复活, 恢复50%生命
-export function createDead(battle): IEntity {
+export function createDead(battle): Entity {
   const character = createTeamDPS(battle, 'deadman', 3500, 50);
   let timeDeadth = 0;
-  character.onUpdate = () => {
+  character.on('update', () => {
     if (!character.isAlive) {
       timeDeadth += DeltaTime;
       if (timeDeadth > 10) {
@@ -46,22 +44,19 @@ export function createDead(battle): IEntity {
         character.isAlive = true;
         character.hp = 1;
         SHLog.info('deadman rebirth');
-        makeEffect(
-          {
-            caster: character,
-            target: character,
-            name: 'rebirth',
-            heal: character.hpmax * 0.5,
-          },
-          MakeEffectInstance
-        );
+        makeEffect({
+          caster: character,
+          target: character,
+          name: 'rebirth',
+          heal: character.hpmax * 0.5,
+        });
       }
     }
-  };
+  });
   return character;
 }
 
-export function createRaven(battle): IEntity {
+export function createRaven(battle): Entity {
   const character = createTeamDPS(battle, 'caller', 1000, 120);
 
   return character;

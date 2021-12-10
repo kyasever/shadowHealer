@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { IEntity } from '@core/common';
-defineProps<{ entity: IEntity }>()
+import { Entity } from '@core/battle';
+defineProps<{ entity: any }>()
 
 
 

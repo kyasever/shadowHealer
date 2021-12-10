@@ -1,17 +1,16 @@
-import { SHLog } from '@core/log';
-import { characterData } from '../data';
-import { Battle, makeEffect, IBuff } from '../common';
-import { createEntityFromData } from '.';
+import { Battle, Buff, createEntityFromData, makeEffect } from '../battle';
+import { getCharacterData } from '../data';
+import { SHLog } from '../utils';
 
 export function createEntityMonk(battle: Battle) {
-  const monkData = characterData['monk'];
+  const monkData = getCharacterData['monk'];
   const entity = createEntityFromData(battle, monkData);
 
   let cantAttack = 0;
 
   const skill5 = entity.skills['skill5'];
 
-  entity.onEffect = () => {
+  entity.on('effect', () => {
     if (cantAttack > 0) {
       cantAttack--;
       makeEffect({
@@ -25,24 +24,21 @@ export function createEntityMonk(battle: Battle) {
     } else {
       return;
     }
-  };
+  });
 
-  skill5.onUse = () => {
+  skill5.on('use', () => {
     cantAttack = skill5.custom.during;
-  };
+  });
 
   const skill6 = entity.skills['skill6'];
 
-  const buff: IBuff = {
-    name: skill6.name,
-    target: entity,
-    caster: entity,
-    release: skill6.custom.duiring,
-    onCalculateProperty: (property) => {
-      property.apmax += 100;
-    },
-  };
-  skill6.onUse = () => {
+  const buff: Buff = new Buff(skill6.name);
+  buff.release = skill6.custom.duiring;
+  buff.on('calculateProperty', (property) => {
+    property.apmax += 100;
+  });
+
+  skill6.on('use', () => {
     makeEffect({
       name: skill6.name,
       target: entity,
@@ -51,7 +47,7 @@ export function createEntityMonk(battle: Battle) {
       heal: -entity.hpmax * 0.3,
       addBuff: buff,
     });
-  };
+  });
 
   return entity;
 }

@@ -1,26 +1,27 @@
 <script setup lang="ts">
 
-import Entity from './VEntity.vue'
-import { Battle, DeltaTime, GameConfig, IEntity } from '@core/common';
+import VEntity from './VEntity.vue'
+import { Battle, Entity } from '@core/battle';
 import { createBattle, custom1 } from './runner'
 import { ref } from 'vue';
+import { GameConfig } from '@core/game';
 
 const time = ref('0');
 const fps = ref('0')
 let battle: Battle
-GameConfig.gameSpeed = 0.01
+GameConfig.speed = 0.01
 
 function startBattle(b) {
   battle = b;
-  battle.onUpdate(() => {
+  battle.on('update', () => {
     time.value = battle.time.toFixed(2)
     fps.value = battle.FPS.toFixed(2)
     items.value = {
-      ...battle.characters
+      ...battle.entitys
     }
   })
   items.value = {
-    ...battle.characters
+    ...battle.entitys
   }
 }
 
@@ -37,7 +38,7 @@ function runBattle() {
 
 
 
-const items = ref<Array<IEntity>>()
+const items = ref<Array<Entity>>()
 
 </script>
 
@@ -54,7 +55,7 @@ const items = ref<Array<IEntity>>()
   <ul id="array-rendering">
     <li v-for="entity in items">
       <!-- 这样来让子组件认为,每次更新都是一个新的Entity.. -->
-      <Entity :entity="{ ...entity }"></Entity>
+      <VEntity :entity="{ ...entity }"></VEntity>
     </li>
   </ul>
 </template>

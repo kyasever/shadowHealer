@@ -1,4 +1,4 @@
-import { IDataEntity } from '../characters';
+import { IDataEntity } from '.';
 
 /**
  * 用ts代替了原来的json以便享受ts的类型定义,但是要注意, 此文件只记录关键属性, 必须可序列化

@@ -1,12 +1,11 @@
+import { Battle } from '@core/battle';
 import {
-  createDead,
   createEntityWizzard,
-  createEnemyBoss,
-  createEnemyStake,
-  createEntityMonk,
   createTeamDPS,
-} from '@core/characters';
-import { Battle, GameConfig } from '@core/common';
+  createEnemyBoss,
+  createEntityMonk,
+  createEnemyStake,
+} from '@core/entitys';
 
 export function createBattle(): Battle {
   const battle = new Battle();
@@ -17,7 +16,6 @@ export function createBattle(): Battle {
   const c5 = createTeamDPS(battle, 'c5', 1000, 190);
   battle.teams = [c1, c2, c3, c4, c5];
   battle.enemys = [createEnemyBoss(battle)];
-  battle.init();
   return battle;
 }
 
@@ -30,6 +28,5 @@ export function custom1() {
   battle.teams = [c3];
   battle.enemys = [createEnemyStake(battle)];
   battle.timeLimit = 300;
-  battle.init();
   return battle;
 }

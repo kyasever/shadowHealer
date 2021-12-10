@@ -1,16 +1,17 @@
 import { json } from 'stream/consumers';
-import { Battle, FrameCount, GameConfig } from '../core/common';
-// https://github.com/tj/commander.js/blob/master/Readme_zh-CN.md#%e5%91%bd%e4%bb%a4
-import { SHLog } from '../core/log';
 import { debug, time } from 'console';
 import { Commander } from './commander';
+import { Battle } from '../battle';
 import {
   createEntityWizzard,
-  createDead,
-  createEnemyBoss,
   createEnemyStake,
   createTeamDPS,
-} from '../core/characters';
+  createEnemyBoss,
+  createDead,
+} from '../entitys';
+import { GameConfig } from '../game';
+import { SHLog } from '../utils';
+
 const program = new Commander();
 program
   .options('-t --time', 'time', 60)
@@ -39,19 +40,17 @@ export function stakeSim(options) {
   battle.teams.push(createEntityWizzard(battle));
   battle.enemys.push(createEnemyStake(battle));
 
-  battle.init();
-
   const timeStart = new Date().getTime();
 
   let step = 3600 * 10;
   let target = step;
-  battle.onUpdate = () => {
+  battle.on('update', () => {
     if (battle.time > target) {
       const timeDuring = ((new Date().getTime() - timeStart) / 1000).toFixed(2);
       SHLog.info(`(${timeDuring}s)running: ${battle.time}/${battle.timeLimit}`);
       target += step;
     }
-  };
+  });
 
   battle.start();
 
@@ -81,7 +80,6 @@ export function battleSim(options) {
     const c5 = createTeamDPS(battle, 'c5', 1000, 190);
     battle.teams = [c1, c2, c3, c4, c5];
     battle.enemys = [createEnemyBoss(battle)];
-    battle.init();
     battle.start();
     if (times === 1) {
       battle.skada.outPut(options.target);
@@ -115,7 +113,6 @@ export function play(options) {
   battle.teams = [c1, c2];
   battle.enemys = [createEnemyBoss(battle)];
 
-  battle.init();
   battle.start();
   battle.skada.outPut(options.target);
 }

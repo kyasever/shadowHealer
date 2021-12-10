@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DeltaTime, GameConfig, IEntity } from '@core/common';
+import { Entity } from '@core/battle';
 import VBattle from './VBattle.vue'
-import { log_level } from '@core/log';
+import { GameConfig, DeltaTime } from '@core/game';
+import { log_level } from '@core/utils';
 
 const defaultLogLevel = log_level.verbose
 const logLevel = ref(defaultLogLevel)
@@ -18,7 +19,7 @@ const gameSpeedTruth = [-1, DeltaTime, DeltaTime / 2, DeltaTime / 4, DeltaTime /
 
 
 function changeGameSpeed() {
-  GameConfig.gameSpeed = gameSpeedTruth[gameSpeed.value]
+  GameConfig.speed = gameSpeedTruth[gameSpeed.value]
 }
 
 const active = ref(2)
@@ -31,7 +32,7 @@ function pause() {
   } else {
     gameSpeed.value = lastSpeed
   }
-  GameConfig.gameSpeed = gameSpeedTruth[gameSpeed.value]
+  GameConfig.speed = gameSpeedTruth[gameSpeed.value]
 }
 
 </script>

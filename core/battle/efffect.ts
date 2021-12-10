@@ -1,47 +1,60 @@
-import {
-  Battle,
-  calculateProperty,
-  changeAp,
-  changeHp,
-  DeltaTime,
-  FrameCount,
-  IBuff,
-  IEffect,
-  IEntity,
-  ISkill,
-} from '.';
-import { SHLog } from '../log';
+import { SHLog } from '../utils';
+import { Battle } from './battle';
+import { Buff } from './buff';
+import { Entity } from './entity';
+import { calculateProperty } from './property';
 import { Skada } from './skada';
 
-export const MakeEffectInstance = -1;
-
-/**
- * effect在帧末生效
+/*
+ * makeEffect 核心函数: 所有的数据操作都要走effect
  */
-export function makeEffect(effect: IEffect, time?: number) {
-  // 暂时删除effect的延迟执行机制, 不然调试有点麻烦,堆栈断了...
-  _dealEffect(effect);
+export interface IEffect {
+  // 记录中的名字
+  name: string;
+  // 释放者
+  caster?: Entity;
+  // 目标, 每个effect结算一个目标
+  target: Entity;
 
-  // // time为负 代表立即执行
-  // if (time && time < 0) {
-  //   _dealEffect(effect);
-  //   return;
-  // }
-  // // 为空或0 代表本帧执行
-  // const battle = effect.caster.battle;
-  // if (battle) {
-  //   battle.effectToCall.push(effect);
-  // }
-  // // 为正数,代表延迟执行
+  // 默认暴击率取caster
+  critRate?: number;
+  critDamage?: number;
+  isCrit?: boolean;
+
+  // 对target造成伤害(相对于hp变化取反)
+  damage?: number;
+  // 对target造成治疗, 负治疗也会算作治疗,但不会致死
+  heal?: number;
+  // 对caster改变ap
+  ap_caster?: number;
+  // 对target改变ap
+  ap_target?: number;
+  // 对target施加buff
+  addBuff?: Buff;
+  // 移除
+  removeBuff?: Buff;
+  // 对battle增加实体
+  addEntity?: Entity;
+
+  // 每一步回调和处理,在这里记录日志
+  logs?: string[];
+
+  // 预期结算时间, 默认为now
+  time?: number;
 }
 
 /**
  * effect立即生效
  */
-export function _dealEffect(effect: IEffect) {
+export function makeEffect(effect: IEffect) {
   const { caster, target } = effect;
-  if (!caster || !target) {
-    SHLog.error('not fond target');
+  if (!caster) {
+    SHLog.error('not found caster', effect);
+    return;
+  }
+  if (!target) {
+    SHLog.error('not found target', effect);
+    return;
   }
   effect.time = caster.battle.time;
   effect.critRate = effect.critRate || caster.critRate;
@@ -55,41 +68,17 @@ export function _dealEffect(effect: IEffect) {
     effect.logs.push(msg);
   };
   // ----- 回调处理阶段 -----
-  const call = (obj, eventName: string) => {
-    if (!obj) {
-      SHLog.error(`effect entity not fond`, effect);
-      return;
-    }
-    if (obj[eventName]) {
-      let res = obj[eventName](effect);
-      if (!res) {
-        res = `${obj.name} called ${eventName}`;
-      }
-      log(res);
-      return res;
-    }
-  };
-  let callRes = call(caster, 'onEffect');
-  if (callRes === 'reject') {
-    return;
-  }
+
+  caster.emit('effect', effect);
   for (let i = 0; i < Object.keys(caster.buffs).length; i++) {
     let buffname = Object.keys(caster.buffs)[i];
-    call(caster.buffs[buffname], 'onEffect');
-    if (callRes === 'reject') {
-      return;
-    }
+    caster.buffs[buffname].emit('effect', effect);
   }
-  call(target, 'onBehit');
-  if (callRes === 'reject') {
-    return;
-  }
+
+  target.emit('behit', effect);
   for (let i = 0; i < Object.keys(target.buffs).length; i++) {
     let buffname = Object.keys(target.buffs)[i];
-    call(target.buffs[buffname], 'onBehit');
-    if (callRes === 'reject') {
-      return;
-    }
+    target.buffs[buffname].emit('behit', effect);
   }
   // ----- 变更结算阶段 -----
   effect.isCrit = Math.random() < effect.critRate;
@@ -101,22 +90,22 @@ export function _dealEffect(effect: IEffect) {
     if (effect.isCrit) {
       effect.damage *= effect.critDamage;
     }
-    effect.damage = -changeHp(target, -effect.damage);
+    effect.damage = target.changeHp(-effect.damage);
   }
 
   if (effect.heal) {
     if (effect.isCrit) {
       effect.heal *= effect.critDamage;
     }
-    effect.heal = changeHp(target, effect.heal);
+    effect.heal = target.changeHp(effect.heal);
   }
 
   if (effect.ap_caster) {
-    changeAp(caster, effect.ap_caster);
+    caster.changeAp(effect.ap_caster);
   }
 
   if (effect.ap_target) {
-    changeAp(target, effect.ap_target);
+    target.changeAp(effect.ap_target);
   }
 
   if (effect.addBuff) {
@@ -125,7 +114,8 @@ export function _dealEffect(effect: IEffect) {
     buff.target = target;
     const oldBuff = target.buffs[buff.name];
     if (!target.buffs[buff.name]) {
-      target.buffs[buff.name] = { ...buff };
+      // TODO: copy risk
+      target.buffs[buff.name] = buff;
     } else {
       // 结算堆叠层数
       if (oldBuff.maxStack) {
@@ -140,7 +130,7 @@ export function _dealEffect(effect: IEffect) {
         oldBuff.release = buff.release;
       }
     }
-    call(buff, 'onAdd');
+    buff.emit('add', null);
     SHLog.debug(`${buff.target.name} add buff ${buff.name}`);
     // addBuff会触发属性计算
     calculateProperty(buff.target);
@@ -148,8 +138,8 @@ export function _dealEffect(effect: IEffect) {
 
   if (effect.removeBuff) {
     const buff = effect.removeBuff;
-    if (!buff.static && buff.target.buffs[buff.name]) {
-      call(buff, 'onRemove');
+    if (buff.type === 'normal' && buff.target.buffs[buff.name]) {
+      buff.emit('remove', null);
       delete buff.target.buffs[buff.name];
       SHLog.debug(`${buff.target.name} remove buff ${buff.name}`);
       calculateProperty(buff.target);
@@ -157,8 +147,10 @@ export function _dealEffect(effect: IEffect) {
   }
 
   // ----- 结束处理阶段 -----
-  target.afterBehit && target.afterBehit(effect);
-  caster.afterEffect && caster.afterEffect(effect);
+  target.emit('afterBehit', effect);
+  caster.emit('afterEffect', effect);
+
   effect.logs.push('deal effect end');
-  Skada.instance.addRecord(effect);
+
+  caster.battle.skada.addRecord(effect);
 }
