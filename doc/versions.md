@@ -80,9 +80,18 @@ bata1.6? ui 更新
 
 bata1.7? 游戏更新
 
-beta1.8?
+- game 逻辑
+- 可选角色与关卡
+- 测试关卡与用例
+
+beta1.8? phaser 更新
 制作 phaser 界面, 尝试 phaser/vue 混合模式
-加入角色动画和远程弹道并兼容系统.
+下载一些 spine 的素材
+加入角色动画和远程弹道
+下周开发 phaser 版本
+
+bata2.0 ? 游戏可玩,可分发.
+可分发给一些玩家和开发者
 
 # 界面逻辑
 
@@ -91,7 +100,7 @@ beta1.8?
 上层是 vue 用 dom 实现
 debug 功能做成一个单独的,可拖拽的 debug 面板 vue-draggable-resizable
 
-短期来看, 可以用 vue 开发所有功能,保证游戏可玩
+短期来看, 可以用 vue 开发所有功能,保证游戏可玩, 任何 feature 都可以先开发 vue 版本,后考虑 phaser
 
 # 核心逻辑
 
