@@ -1,60 +1,49 @@
 import { EventEmitter } from 'events';
 import { DeltaTime, FrameCount, GameConfig } from '../game';
-import { SHLog, wait } from '../utils';
+import { SHInterface, SHLog, wait } from '../utils';
 import { makeEffect } from './efffect';
 import { Entity } from './entity';
 import { Skada } from './skada';
-
-export interface IBattle {
-  /** 所有场上存活的character, 引用可以保存在多个不同的容器里 */
-  entitys: Entity[];
-  /** 按照站位排列的己方单位 */
-  teams: Entity[];
-  // 敌人
-  enemys: Entity[];
-  // 主要目标
-  coreTarget: Entity;
-  time: number;
-  timeLimit: number;
-  skada: Skada;
-  gameSpeed: number;
-
-  // 默认 undefined 有值代表有结果了
-  gameResult: string;
-
-  FPS: number;
-}
 
 type EventType =
   | { event: 'init'; param: void }
   | { event: 'update'; param: void }
   | { event: 'end'; param: void };
 
-export class Battle implements IBattle {
+export type IBattle = SHInterface<Battle>;
+
+export class Battle {
+  /** 所有场上存活的character, 引用可以保存在多个不同的容器里 */
   entitys: Entity[];
-  teams: Entity[];
-  enemys: Entity[];
+  /** 按照站位排列的己方单位 */
+  teams: Entity[] = [];
+  // 敌人
+  enemys: Entity[] = [];
+  // 主要目标
   coreTarget: Entity;
-  time: number;
-  timeLimit: number;
+  time: number = 0;
+  timeLimit: number = 900;
   skada: Skada;
-  gameSpeed: number;
-  gameResult: any;
-  FPS: number;
+
+  // 默认 undefined 有值代表有结果了
+  gameResult: string;
+
+  FPSTimeStart = 0;
+  FPSCount = 0;
+  FPS: number = 0;
 
   _eventEmitter: EventEmitter;
   constructor() {
     this.skada = new Skada(this);
     this._eventEmitter = new EventEmitter();
-
     this.on('update', () => {
       this.update();
     });
+  }
 
-    this.on('init', () => {
-      this.entitys = [...this.teams, ...this.enemys];
-      this.coreTarget = this.enemys[0];
-    });
+  init() {
+    this.entitys = [...this.teams, ...this.enemys];
+    this.coreTarget = this.enemys[0];
   }
 
   on<T extends EventType['event']>(
@@ -71,8 +60,6 @@ export class Battle implements IBattle {
     this._eventEmitter.emit(event, param);
   }
 
-  FPSTimeStart = 0;
-  FPSCount = 0;
   async start() {
     this.emit('init', null);
     while (true) {
@@ -164,7 +151,7 @@ function updateCharacters(battle: Battle) {
             caster: buff.caster,
             target: buff.target,
             name: 'buff-timeout',
-            removeBuff: buff,
+            removeBuff: buff.name,
           });
         }
       }

@@ -86,6 +86,7 @@ export class Entity {
     this.skills = {};
     this.attackRelease = Math.random();
     this._eventEmitter = new EventEmitter();
+    this.buffCreater = {};
     this.custom = {};
     calculateProperty(this);
     this.hp = this.hpmax;
@@ -129,7 +130,7 @@ export class Entity {
         this.makeEffect({
           target: this,
           name: 'dead',
-          removeBuff: buff,
+          removeBuff: buff.name,
         });
       });
       SHLog.info(`${this.name} dead`);

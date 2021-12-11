@@ -1,5 +1,7 @@
 import { SHInterface } from '@core/utils';
+import { timeStamp } from 'console';
 import { EventEmitter } from 'events';
+import { normalize } from 'path/posix';
 import { IEffect } from '.';
 import { Entity, IEntityProperty } from './entity';
 
@@ -29,6 +31,8 @@ export class Buff {
   custom?: any;
   constructor(name) {
     this.name = name;
+    this.type = 'normal';
+    this._eventEmitter = new EventEmitter();
   }
 
   _eventEmitter: EventEmitter;

@@ -29,7 +29,11 @@ const emit = new EventEmitter();
 
 emit.on('a', (res) => {
   console.log('a', res);
+  return 'aa';
 });
 
-emit.emit('a');
-emit.emit('a', 'arg1', 'arg2');
+console.log(emit.emit('a'));
+
+const ff = emit.listeners('a');
+console.log(ff);
+console.log(ff[0]());

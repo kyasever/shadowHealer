@@ -98,9 +98,8 @@ export const SHLog = {
   },
 
   error: (msg, ...args) => {
-    if (GameConfig.logLevel <= log_level.error) {
-      console.error(formatMsg(msg), ...args);
-    }
+    console.error(formatMsg(msg), ...args);
+    throw new Error(formatMsg(msg));
   },
 
   table: (object, level) => {

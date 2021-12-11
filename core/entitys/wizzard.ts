@@ -12,11 +12,18 @@
 攻击速度提高15%
 */
 
-import { Buff, createEntityFromData, IEffect, makeEffect } from '../battle';
+import {
+  aiUseSkillWithPriority,
+  Buff,
+  createEntityFromData,
+  IEffect,
+  makeEffect,
+} from '../battle';
 import { loadCharacterData } from '../data';
 
 export function createEntityWizzard(battle) {
-  const entity = createEntityFromData(battle, loadCharacterData().wizzard);
+  const entity = createEntityFromData(battle, loadCharacterData('wizzard'));
+  aiUseSkillWithPriority(entity);
 
   entity.custom.cycleChange = 0.2;
   entity.on('effect', (effect) => {
@@ -44,17 +51,22 @@ export function createEntityWizzard(battle) {
 
   const skillFinal = entity.skills['final'];
 
-  const finalBuff: Buff = new Buff('finalBuff');
-  finalBuff.release = 10;
-  finalBuff.on('calculateProperty', (prop) => {
-    prop.attack += 50;
-  });
-  finalBuff.on('add', () => {
-    entity.custom.cycleChange = 0.4;
-  });
-  finalBuff.on('remove', () => {
-    entity.custom.cycleChange = 0.2;
-  });
+  entity.buffCreater = {
+    finalBuff: () => {
+      const finalBuff: Buff = new Buff('finalBuff');
+      finalBuff.release = 10;
+      finalBuff.on('calculateProperty', (prop) => {
+        prop.attack += 50;
+      });
+      finalBuff.on('add', () => {
+        entity.custom.cycleChange = 0.4;
+      });
+      finalBuff.on('remove', () => {
+        entity.custom.cycleChange = 0.2;
+      });
+      return finalBuff;
+    },
+  };
 
   skillFinal.on('use', () => {
     makeEffect({
@@ -68,7 +80,7 @@ export function createEntityWizzard(battle) {
       caster: entity,
       target: entity,
       name: 'Final',
-      addBuff: finalBuff,
+      addBuff: 'finalBuff',
     });
   });
 

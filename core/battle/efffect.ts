@@ -29,10 +29,10 @@ export interface IEffect {
   ap_caster?: number;
   // 对target改变ap
   ap_target?: number;
-  // 对target施加buff
-  addBuff?: Buff;
+  // 对target施加buff, 通过caster的create获得实例
+  addBuff?: string;
   // 移除
-  removeBuff?: Buff;
+  removeBuff?: string;
   // 对battle增加实体
   addEntity?: Entity;
 
@@ -90,7 +90,7 @@ export function makeEffect(effect: IEffect) {
     if (effect.isCrit) {
       effect.damage *= effect.critDamage;
     }
-    effect.damage = target.changeHp(-effect.damage);
+    effect.damage = -target.changeHp(-effect.damage);
   }
 
   if (effect.heal) {
@@ -109,12 +109,22 @@ export function makeEffect(effect: IEffect) {
   }
 
   if (effect.addBuff) {
-    const buff = effect.addBuff;
+    if (!caster.buffCreater[effect.addBuff]) {
+      SHLog.error(`${caster.name} can not create buff ${effect.addBuff}`);
+      return;
+    }
+    const buff: Buff = caster.buffCreater[effect.addBuff]();
     buff.caster = caster;
     buff.target = target;
-    const oldBuff = target.buffs[buff.name];
-    if (!target.buffs[buff.name]) {
-      // TODO: copy risk
+    if (buff.name !== effect.addBuff) {
+      SHLog.error(`buff 中的name 与addBuff中的name不符`, {
+        name: buff.name,
+        addName: effect.addBuff,
+      });
+    }
+
+    const oldBuff = target.buffs[effect.addBuff];
+    if (!target.buffs[effect.addBuff]) {
       target.buffs[buff.name] = buff;
     } else {
       // 结算堆叠层数
@@ -137,13 +147,18 @@ export function makeEffect(effect: IEffect) {
   }
 
   if (effect.removeBuff) {
-    const buff = effect.removeBuff;
-    if (buff.type === 'normal' && buff.target.buffs[buff.name]) {
-      buff.emit('remove', null);
-      delete buff.target.buffs[buff.name];
-      SHLog.debug(`${buff.target.name} remove buff ${buff.name}`);
-      calculateProperty(buff.target);
+    if (!target.buffs[effect.removeBuff]) {
+      SHLog.warn(`${target.name} not have buff ${effect.removeBuff}`);
     }
+    const buff = target.buffs[effect.removeBuff];
+    if (buff.type !== 'normal') {
+      SHLog.warn(`buff ${buff.name} is not normal buff, 不应该被驱散`);
+    }
+
+    buff.emit('remove', null);
+    delete target.buffs[effect.removeBuff];
+    SHLog.debug(`${buff.target.name} remove buff ${buff.name}`);
+    calculateProperty(buff.target);
   }
 
   // ----- 结束处理阶段 -----

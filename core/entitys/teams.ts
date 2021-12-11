@@ -6,7 +6,7 @@ import { randomRange, randomString, SHLog } from '../utils';
 export function createTeamDPS(battle: Battle, data: IDataEntity): Entity {
   let dps = randomRange(100, 300);
   let _data: IDataEntity = data || {
-    name: 'c_' + dps.toString(),
+    name: 'c_' + dps.toFixed(0),
     property: {
       hpmax: 1000,
       apmax: 100,

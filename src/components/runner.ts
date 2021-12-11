@@ -3,7 +3,7 @@ import { createEntity } from '@core/entitys';
 
 export function createBattle(): Battle {
   const battle = new Battle();
-  const c1 = createEntity('wuzzard', battle);
+  const c1 = createEntity('wizzard', battle);
   const c2 = createEntity('normalDPS', battle);
   const c3 = createEntity('normalDPS', battle);
   const c4 = createEntity('normalDPS', battle);
@@ -13,7 +13,7 @@ export function createBattle(): Battle {
   return battle;
 }
 
-export function custom1() {
+export function custom1(): Battle {
   const battle = new Battle();
 
   // const c1 = createDead(battle);

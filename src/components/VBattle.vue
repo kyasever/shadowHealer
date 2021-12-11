@@ -12,7 +12,7 @@ let battle: Battle
 GameConfig.speed = 0.01
 
 const items = ref<Array<IEntity>>()
-function startBattle(b) {
+function startBattle(b: Battle) {
   battle = b;
   battle.on('update', () => {
     time.value = battle.time.toFixed(2)
@@ -21,9 +21,11 @@ function startBattle(b) {
       ...battle.entitys as any
     }
   })
+  battle.init()
   items.value = {
     ...battle.entitys as any
   }
+
 }
 
 function loadBattle() {
@@ -35,6 +37,7 @@ function loadPlayground() {
 
 function runBattle() {
   battle.start()
+
 }
 
 

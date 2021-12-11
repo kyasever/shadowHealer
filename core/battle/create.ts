@@ -1,4 +1,4 @@
-import { Battle, Skill, makeEffect } from '.';
+import { Battle, Skill, makeEffect, IEntity } from '.';
 import { IDataEntity } from '../data';
 import { SHLog } from '../utils';
 import { Entity } from './entity';
@@ -13,12 +13,22 @@ export function createEntityFromData(battle, data: IDataEntity): Entity {
   const entity = new Entity(battle, data.name, data.property);
 
   entity.skillPriority = data.skillPriority;
+
   if (data.skills) {
     data.skills.forEach((skillData) => {
       const skill = new Skill(skillData.name);
       skill.cd = skillData.cd;
-      skill.ap_caster = skillData.ap_caster;
       skill.custom = skillData.custom;
+
+      skill.on('canUse', () => {
+        if (entity.ap < -skillData.ap_caster) {
+          return false;
+        }
+        if (skill.cdRelease > 0) {
+          return false;
+        }
+        return true;
+      });
 
       // 标注custom就不帮忙创建了, 自己搞吧
       if (!skillData.custom) {
@@ -43,6 +53,10 @@ export function createEntityFromData(battle, data: IDataEntity): Entity {
     });
   }
 
+  return entity;
+}
+
+export function aiUseSkillWithPriority(entity: Entity) {
   if (entity.skillPriority) {
     entity.on('attack', () => {
       entity.target = entity.battle.coreTarget;
@@ -56,7 +70,7 @@ export function createEntityFromData(battle, data: IDataEntity): Entity {
           );
           break;
         }
-        if (canUseSkill(entity, skill)) {
+        if (skill.canUse()) {
           hasUsedSkill = true;
           skill.emit('use', null);
           skill.cdRelease = skill.cd;
@@ -69,15 +83,4 @@ export function createEntityFromData(battle, data: IDataEntity): Entity {
       }
     });
   }
-  return entity;
-}
-
-export function canUseSkill(entity: Entity, skill: Skill) {
-  if (skill.ap_caster && entity.ap < -skill.ap_caster) {
-    return false;
-  }
-  if (skill.cdRelease > 0) {
-    return false;
-  }
-  return true;
 }

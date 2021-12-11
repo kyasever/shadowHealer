@@ -1,10 +1,17 @@
-import { Battle, Buff, createEntityFromData, makeEffect } from '../battle';
+import {
+  aiUseSkillWithPriority,
+  Battle,
+  Buff,
+  createEntityFromData,
+  makeEffect,
+} from '../battle';
 import { loadCharacterData } from '../data';
 import { SHLog } from '../utils';
 
 export function createEntityMonk(battle: Battle) {
-  const monkData = loadCharacterData['monk'];
+  const monkData = loadCharacterData('monk');
   const entity = createEntityFromData(battle, monkData);
+  aiUseSkillWithPriority(entity);
 
   let cantAttack = 0;
 
@@ -32,11 +39,16 @@ export function createEntityMonk(battle: Battle) {
 
   const skill6 = entity.skills['skill6'];
 
-  const buff: Buff = new Buff(skill6.name);
-  buff.release = skill6.custom.duiring;
-  buff.on('calculateProperty', (property) => {
-    property.apmax += 100;
-  });
+  entity.buffCreater = {
+    buff: () => {
+      const buff: Buff = new Buff('buff');
+      buff.release = skill6.custom.during;
+      buff.on('calculateProperty', (property) => {
+        property.apmax += 100;
+      });
+      return buff;
+    },
+  };
 
   skill6.on('use', () => {
     makeEffect({
@@ -45,7 +57,7 @@ export function createEntityMonk(battle: Battle) {
       caster: entity,
       ap_caster: 50,
       heal: -entity.hpmax * 0.3,
-      addBuff: buff,
+      addBuff: 'buff',
     });
   });
 

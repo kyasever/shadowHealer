@@ -10,8 +10,6 @@ export type ISkill = SHInterface<Skill>;
 export class Skill {
   // caster 本质上是effect需要的, apcost也应该属于effect
   name: string;
-  // 原则上来讲应该等于onUse中实际的开销, 主要通过这个来指示一个技能是否可用
-  ap_caster?: number;
   cd?: number;
   cdRelease?: number;
   custom?: any;
@@ -25,7 +23,7 @@ export class Skill {
 
   on<T extends EventType['event']>(
     event: T,
-    callback: (param?: Extract<EventType, { event: T }>['param']) => void
+    callback: (param?: Extract<EventType, { event: T }>['param']) => any
   ) {
     this._eventEmitter.on(event, callback);
   }
@@ -35,5 +33,17 @@ export class Skill {
     param: Extract<EventType, { event: T }>['param']
   ) {
     this._eventEmitter.emit(event, param);
+  }
+
+  // 调用canUse的所有监听, 监听返回结果均为true 则返回true
+  canUse() {
+    const functions = this._eventEmitter.listeners('canUse');
+    let canUse = true;
+    functions.forEach((f) => {
+      if (f() === false) {
+        canUse = false;
+      }
+    });
+    return canUse;
   }
 }
