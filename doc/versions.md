@@ -72,6 +72,15 @@ beta1.8?
 制作 phaser 界面, 尝试 phaser/vue 混合模式
 加入角色动画和远程弹道并兼容系统.
 
+# 界面逻辑
+
+主体用 vue 分发
+底层是 game canvas, 用 phaser 实现
+上层是 vue 用 dom 实现
+debug 功能做成一个单独的,可拖拽的 debug 面板 vue-draggable-resizable
+
+短期来看, 可以用 vue 开发所有功能,保证游戏可玩
+
 # 核心逻辑
 
 时间切片. 每秒 50 逻辑帧 0.02s 一帧, 在模拟中只有帧数

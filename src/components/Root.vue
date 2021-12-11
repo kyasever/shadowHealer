@@ -22,7 +22,7 @@ function changeGameSpeed() {
   GameConfig.speed = gameSpeedTruth[gameSpeed.value]
 }
 
-const active = ref(2)
+const active = ref(1)
 
 let lastSpeed = gameSpeed.value
 function pause() {
@@ -62,13 +62,13 @@ function pause() {
     <van-button @click="pause">{{ gameSpeed === 0 ? 'run' : 'pause' }}</van-button>
   </div>
 
-  <van-tabs v-model="active">
+  <van-tabs v-model:active="active">
+    <van-tab title="Game">game</van-tab>
     <van-tab title="Battle">
       <VBattle />
     </van-tab>
-    <van-tab title="unuse">2</van-tab>
-    <van-tab title="unuse">3</van-tab>
-    <van-tab title="unuse">4</van-tab>
+    <van-tab title="Simulate">simulate</van-tab>
+    <van-tab title="Test">test</van-tab>
   </van-tabs>
 </template>
 
