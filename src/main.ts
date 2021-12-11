@@ -19,21 +19,8 @@ app.use(Tabs);
 app.mount('#app');
 
 // 启动命令行: 命令行相关代码位于node
-window.run = (command) => {
-  return run(command);
+window.run = async (command) => {
+  return await run(command);
 };
 
 createPhaser('#glcanvas');
-
-const emit = new EventEmitter();
-
-emit.on('a', (res) => {
-  console.log('a', res);
-  return 'aa';
-});
-
-console.log(emit.emit('a'));
-
-const ff = emit.listeners('a');
-console.log(ff);
-console.log(ff[0]());

@@ -21,6 +21,6 @@ export function custom1(): Battle {
   const c3 = createEntity('monk', battle);
   battle.teams = [c3];
   battle.enemys = [createEntity('stake', battle)];
-  battle.timeLimit = 300;
+  battle.timeLimit = 3600;
   return battle;
 }

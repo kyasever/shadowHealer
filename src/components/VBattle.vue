@@ -14,12 +14,16 @@ GameConfig.speed = 0.01
 const items = ref<Array<IEntity>>()
 function startBattle(b: Battle) {
   battle = b;
+  console.time('battle')
   battle.on('update', () => {
     time.value = battle.time.toFixed(2)
     fps.value = battle.FPS.toFixed(2)
     items.value = {
       ...battle.entitys as any
     }
+  })
+  battle.on('end', () => {
+    console.timeEnd('battle')
   })
   battle.init()
   items.value = {
@@ -36,8 +40,7 @@ function loadPlayground() {
 }
 
 function runBattle() {
-  battle.start()
-
+  battle.run()
 }
 
 

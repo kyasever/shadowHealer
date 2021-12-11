@@ -14,8 +14,8 @@ function changeLogLevel() {
 
 const defaultGameSpeed = 2
 const gameSpeed = ref(defaultGameSpeed)
-const gameSpeedDescription = ['pause', 'x1', 'x2', 'x4', 'x8', 'instance']
-const gameSpeedTruth = [-1, DeltaTime, DeltaTime / 2, DeltaTime / 4, DeltaTime / 8, 0]
+const gameSpeedDescription = ['pause', 'x1', 'x2', 'x4', 'x32', 'instance']
+const gameSpeedTruth = [-1, DeltaTime, DeltaTime / 2, DeltaTime / 4, DeltaTime / 32, 0]
 
 
 function changeGameSpeed() {

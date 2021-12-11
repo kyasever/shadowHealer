@@ -60,7 +60,7 @@ export class Battle {
     this._eventEmitter.emit(event, param);
   }
 
-  async start() {
+  async run() {
     this.emit('init', null);
     while (true) {
       // =0 说明不需要间隔,最快速度跑帧
@@ -99,6 +99,7 @@ export class Battle {
       }
     }
     this.outputField();
+    this.emit('end', null);
   }
 
   // 每帧一次
@@ -130,7 +131,7 @@ export class Battle {
         nextAttack: c.attackRelease.toFixed(2) + 's',
       });
     });
-    SHLog.table(tt, 3);
+    SHLog.table(tt, 5);
   }
 }
 

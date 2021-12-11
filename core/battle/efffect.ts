@@ -1,3 +1,4 @@
+import { HEADLESS } from 'phaser';
 import { SHLog } from '../utils';
 import { Battle } from './battle';
 import { Buff } from './buff';
@@ -96,6 +97,10 @@ export function makeEffect(effect: IEffect) {
   if (effect.heal) {
     if (effect.isCrit) {
       effect.heal *= effect.critDamage;
+    }
+    // 治疗扣血不会致死
+    if (effect.heal < 0 && -effect.heal > target.hp) {
+      effect.heal = -(target.hp - 1);
     }
     effect.heal = target.changeHp(effect.heal);
   }
