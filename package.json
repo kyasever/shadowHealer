@@ -20,10 +20,12 @@
   ],
   "dependencies": {
     "axios": "^0.24.0",
+    "element-plus": "^1.2.0-beta.6",
     "events": "^3.3.0",
     "phaser": "^3.55.2",
+    "unplugin-auto-import": "^0.5.3",
+    "unplugin-vue-components": "^0.17.8",
     "utility-types": "^3.10.0",
-    "vant": "3",
     "vue": "^3.2.16"
   },
   "devDependencies": {
@@ -49,9 +51,7 @@
   "engines": {
     "node": ">= 0.12"
   },
-  "licenses": [
-    {
-      "type": "MIT"
-    }
-  ]
+  "licenses": [{
+    "type": "MIT"
+  }]
 }

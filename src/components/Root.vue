@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Entity } from '@core/battle';
 import VBattle from './VBattle.vue'
 import { GameConfig, DeltaTime } from '@core/game';
 import { log_level } from '@core/utils';
@@ -9,6 +8,7 @@ const defaultLogLevel = log_level.verbose
 const logLevel = ref(defaultLogLevel)
 const logLevelDescription = ['verbose', 'debug', 'info', 'warn', 'error']
 function changeLogLevel() {
+
   GameConfig.logLevel = logLevel.value
 }
 
@@ -40,36 +40,36 @@ function pause() {
 <template>
   <div class="sliderContainer">
     <div>logLevel:{{ logLevelDescription[logLevel] }}</div>
-    <van-slider
+    <el-slider
       class="slider"
       v-model="logLevel"
       @change="changeLogLevel"
-      min="1"
-      max="5"
-      step="1"
+      :min="1"
+      :max="5"
+      show-stops
     />
   </div>
   <div class="sliderContainer">
     <div>gameSpeed:{{ gameSpeedDescription[gameSpeed] }}</div>
-    <van-slider
+    <el-slider
       class="slider"
       v-model="gameSpeed"
       @change="changeGameSpeed"
-      min="0"
-      max="5"
-      step="1"
+      :min="0"
+      :max="5"
+      show-stops
     />
-    <van-button @click="pause">{{ gameSpeed === 0 ? 'run' : 'pause' }}</van-button>
+    <el-button @click="pause">{{ gameSpeed === 0 ? 'run' : 'pause' }}</el-button>
   </div>
 
-  <van-tabs v-model:active="active">
-    <van-tab title="Game">game</van-tab>
-    <van-tab title="Battle">
+  <el-tabs v-model:active="active">
+    <el-tab-pane label="Game">game</el-tab-pane>
+    <el-tab-pane label="Battle">
       <VBattle />
-    </van-tab>
-    <van-tab title="Simulate">simulate</van-tab>
-    <van-tab title="Test">test</van-tab>
-  </van-tabs>
+    </el-tab-pane>
+    <el-tab-pane label="Simulate">simulate</el-tab-pane>
+    <el-tab-pane label="Test">test</el-tab-pane>
+  </el-tabs>
 </template>
 
 <style scoped>
@@ -82,6 +82,7 @@ function pause() {
 }
 
 .slider {
+  flex-grow: 2;
   margin-left: 20px;
   margin-right: 20px;
 }

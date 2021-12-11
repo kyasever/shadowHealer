@@ -1,9 +1,12 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import { run } from '@core/commander';
-import { Button, Switch, Slider, Tab, Tabs } from 'vant';
+
 import { createPhaser } from '../phaser';
 import { EventEmitter } from 'events';
+
+import ElementPlus from 'element-plus';
+import 'element-plus/dist/index.css';
 
 declare const window: any;
 
@@ -11,11 +14,8 @@ declare const window: any;
 
 // 启动vue: vue相关代码位于src(非src还得单独配置太麻烦了)
 const app = createApp(App);
-app.use(Button);
-app.use(Switch);
-app.use(Slider);
-app.use(Tab);
-app.use(Tabs);
+app.use(ElementPlus);
+
 app.mount('#app');
 
 // 启动命令行: 命令行相关代码位于node

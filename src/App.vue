@@ -23,8 +23,8 @@ const refMsg = ref({ v: 'msg' })
 </script>
 
 <template>
-  <van-switch v-model="enableGame" @change="onCanvasEnable" />enableGame
-  <van-switch v-model="enableVue" />enableVue
+  <el-switch v-model="enableGame" @change="onCanvasEnable" active-text="enableGame" />
+  <el-switch v-model="enableVue" active-text="enableVue" />
   <Root v-if="enableVue" />
   <canvas id="glcanvas"></canvas>
 </template>

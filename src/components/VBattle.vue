@@ -55,9 +55,9 @@ function runBattle() {
     <div class="label">logicFPS: {{ fps }}</div>
   </div>
   <div style="display: flex;">
-    <van-button class="btn" @click="loadPlayground" plain type="primary">startPlayground</van-button>
-    <van-button class="btn" @click="loadBattle" plain type="primary">startBattle</van-button>
-    <van-button class="btn" @click="runBattle" plain type="primary">runBattle</van-button>
+    <el-button class="btn" @click="loadPlayground" plain type="primary">startPlayground</el-button>
+    <el-button class="btn" @click="loadBattle" plain type="primary">startBattle</el-button>
+    <el-button class="btn" @click="runBattle" plain type="primary">runBattle</el-button>
   </div>
   <ul id="array-rendering">
     <li v-for="entity in items">

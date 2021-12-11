@@ -1,6 +1,5 @@
 import { SHInterface } from '@core/utils';
 import { EventEmitter } from 'events';
-import { Callback } from 'vant/lib/lazyload/vue-lazyload';
 
 type EventType =
   | { event: 'use'; param: void }

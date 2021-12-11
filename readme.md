@@ -36,4 +36,4 @@ src/main.ts 是程序的主入口
 - [vite](https://vitejs.cn/guide/)
 - [vue3](https://v3.cn.vuejs.org/guide/introduction.html)
 - [vant](https://vant-contrib.gitee.io/vant/v3/#/zh-CN)
-- [element](https://element-plus.gitee.io/zh-CN/)
+- [element](https://element-plus.gitee.io/zh-CN/component/button.html)
