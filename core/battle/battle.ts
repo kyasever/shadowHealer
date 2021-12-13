@@ -10,7 +10,7 @@ type EventType =
   | { event: 'update'; param: void }
   | { event: 'perSecond'; param: void }
   | { event: 'end'; param: void }
-  | { event: 'stop'; param: void };
+  | { event: 'stop'; param: string };
 
 export type IBattle = SHInterface<Battle>;
 
@@ -71,8 +71,9 @@ export class Battle {
   async run() {
     this.emit('init', null);
     let isContinue = true;
-    this.on('stop', () => {
+    this.on('stop', (value) => {
       isContinue = false;
+      this.gameResult = value;
     });
     while (isContinue) {
       // =0 说明不需要间隔,最快速度跑帧
@@ -103,10 +104,6 @@ export class Battle {
       }
 
       this._eventEmitter.emit('update');
-
-      if (this.gameResult) {
-        break;
-      }
     }
     this.outputField();
     this.emit('end', null);
@@ -115,17 +112,23 @@ export class Battle {
   // 每帧一次
   update() {
     this.time += DeltaTime;
-    updateCharacters(this);
+
+    this.entitys.forEach((entity) => {
+      entity.emit('update', null);
+      if (entity.isAlive) {
+        this.skada.addBuffData(entity);
+      }
+    });
 
     // 检查是否要结束战斗
     if (this.teams.filter((c) => c.isAlive).length === 0) {
-      this.gameResult = 'fail';
+      this.emit('stop', 'fail');
     }
     if (this.enemys.filter((c) => c.isAlive).length === 0) {
-      this.gameResult = 'success';
+      this.emit('stop', 'success');
     }
     if (this.timeLimit && this.time > this.timeLimit) {
-      this.gameResult = 'timeout';
+      this.emit('stop', 'timeout');
     }
   }
 
@@ -143,47 +146,4 @@ export class Battle {
     });
     SHLog.table(tt, 5);
   }
-}
-
-function updateCharacters(battle: Battle) {
-  battle.entitys.forEach((entity) => {
-    entity.emit('update', null);
-
-    if (!entity.isAlive) {
-      return;
-    }
-    // buff结算
-    Object.keys(entity.buffs).forEach((key) => {
-      const buff = entity.buffs[key];
-      if (buff.release) {
-        buff.release -= DeltaTime;
-        if (buff.release < 0) {
-          makeEffect({
-            caster: buff.caster,
-            target: buff.target,
-            name: 'buff-timeout',
-            removeBuff: buff.name,
-          });
-        }
-      }
-    });
-
-    battle.skada.addBuffData(entity);
-
-    if (!entity.attackRelease) {
-      return;
-    }
-
-    entity.attackRelease -= DeltaTime;
-    if (entity.attackRelease <= 0) {
-      entity.attackRelease = entity.attackInterval;
-      Object.values(entity.skills).forEach((skill) => {
-        if (!skill.cdRelease) {
-          skill.cdRelease = 0;
-        }
-        skill.cdRelease -= 1;
-      });
-      entity.emit('attack', null);
-    }
-  });
 }

@@ -6,3 +6,4 @@ export * from './property';
 export * from './skada';
 export * from './skill';
 export * from './create';
+export * from './component';

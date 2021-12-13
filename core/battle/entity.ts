@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import { FunctionKeys, NonFunctionKeys } from 'utility-types';
+import { dealAttack, dealBuff } from '.';
 import { DeltaTime } from '../game';
 import { SHInterface, SHLog } from '../utils';
 import { Battle } from './battle';
@@ -91,6 +92,10 @@ export class Entity {
     calculateProperty(this);
     this.hp = this.hpmax;
     this.ap = this.apmax;
+
+    // 这两个常规监听一定会处理
+    this.use(dealBuff);
+    this.use(dealAttack);
   }
 
   on<T extends EventType['event']>(
@@ -105,6 +110,10 @@ export class Entity {
     param: Extract<EventType, { event: T }>['param']
   ) {
     this._eventEmitter.emit(event, param);
+  }
+
+  use(callBack: (entity: Entity) => void) {
+    callBack(this);
   }
 
   makeEffect(effect: IEffect) {

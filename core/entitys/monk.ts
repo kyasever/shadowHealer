@@ -1,5 +1,5 @@
 import {
-  aiUseSkillWithPriority,
+  useSkillWithPriority,
   Battle,
   Buff,
   createEntityFromData,
@@ -11,7 +11,7 @@ import { SHLog } from '../utils';
 export function createEntityMonk(battle: Battle) {
   const monkData = loadCharacterData('monk');
   const entity = createEntityFromData(battle, monkData);
-  aiUseSkillWithPriority(entity);
+  entity.use(useSkillWithPriority);
 
   let cantAttack = 0;
 

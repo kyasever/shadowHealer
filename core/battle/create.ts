@@ -55,32 +55,3 @@ export function createEntityFromData(battle, data: IDataEntity): Entity {
 
   return entity;
 }
-
-export function aiUseSkillWithPriority(entity: Entity) {
-  if (entity.skillPriority) {
-    entity.on('attack', () => {
-      entity.target = entity.battle.coreTarget;
-      let hasUsedSkill = false;
-      for (let i = 0; i < entity.skillPriority.length; i++) {
-        const skill = entity.skills[entity.skillPriority[i]];
-        if (!skill) {
-          SHLog.error(
-            `skillPriority not inclued skill:${entity.skillPriority[i]}`,
-            skill
-          );
-          break;
-        }
-        if (skill.canUse()) {
-          hasUsedSkill = true;
-          skill.emit('use', null);
-          skill.cdRelease = skill.cd;
-          SHLog.info(`${entity.name} used skill ${skill.name}`);
-          break;
-        }
-      }
-      if (!hasUsedSkill) {
-        SHLog.error(`${entity.name} not have skill to use`);
-      }
-    });
-  }
-}

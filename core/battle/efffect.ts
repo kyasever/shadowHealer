@@ -8,6 +8,7 @@ import { Skada } from './skada';
 
 /**
  * 核心结算逻辑, 这个类型代表一个操作会对另一个角色产生什么影响
+ * 最终目标是effect可以序列化, 然后将effect根据时间异步分发, 即可实现联机, npc和boss等的effect由主机产生并消费
  */
 export interface IEffect {
   /** 记录中的名字,比如技能名 */

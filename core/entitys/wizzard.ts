@@ -13,7 +13,7 @@
 */
 
 import {
-  aiUseSkillWithPriority,
+  useSkillWithPriority,
   Buff,
   createEntityFromData,
   IEffect,
@@ -23,7 +23,7 @@ import { loadCharacterData } from '../data';
 
 export function createEntityWizzard(battle) {
   const entity = createEntityFromData(battle, loadCharacterData('wizzard'));
-  aiUseSkillWithPriority(entity);
+  entity.use(useSkillWithPriority);
 
   entity.custom.cycleChange = 0.2;
   entity.on('effect', (effect) => {
