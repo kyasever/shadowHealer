@@ -68,7 +68,7 @@ export class Entity {
   /** 技能释放优先级, 默认AI */
   skillPriority?: string[];
 
-  /** addBuff中 buff只传递key, 实例要从这里面拿 */
+  /** addbuff每次加buff都应该是一个新的对象,因此用函数得到这个新对象 */
   buffCreater: { [key: string]: () => Buff };
 
   _eventEmitter: EventEmitter;

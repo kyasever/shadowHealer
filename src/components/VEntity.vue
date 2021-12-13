@@ -41,6 +41,9 @@ function onTouchItem(name) {
           <span>{{ item.hp }}/{{ item.hpmax }}</span>
         </el-progress>
       </div>
+      <el-progress :percentage="item.ap / item.apmax * 100">
+        <div>{{ item.ap }}</div>
+      </el-progress>
     </div>
   </el-card>
 </template>

@@ -20,9 +20,9 @@ function startBattle(b: Battle) {
   battle.on('update', () => {
     time.value = battle.time.toFixed(2)
     fps.value = battle.FPS.toFixed(2)
-    items.value = {
+    items.value = [
       ...battle.entitys as any
-    }
+    ]
   })
   battle.on('end', () => {
     console.timeEnd('battle')
@@ -83,9 +83,9 @@ function onTouchSkadaItem(value) {
     <div class="label">logicFPS: {{ fps }}</div>
   </div>
   <div style="display: flex;">
-    <el-button class="btn" @click="loadPlayground" plain type="primary">startPlayground</el-button>
-    <el-button class="btn" @click="loadBattle" plain type="primary">startBattle</el-button>
-    <el-button class="btn" @click="runBattle" plain type="primary">runBattle</el-button>
+    <el-button size="mini" class="btn" @click="loadPlayground" plain type="primary">startPlayground</el-button>
+    <el-button size="mini" class="btn" @click="loadBattle" plain type="primary">startBattle</el-button>
+    <el-button size="mini" class="btn" @click="runBattle" plain type="primary">runBattle</el-button>
   </div>
   <div id="array-rendering">
     <VEntity :entitys="items"></VEntity>
