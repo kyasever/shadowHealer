@@ -24,7 +24,7 @@ program
     await battle.run();
     console.log('end');
 
-    battle.skada.outPut('monk');
+    battle.skada.getEntityDetails('monk');
     console.timeEnd('1');
   });
 

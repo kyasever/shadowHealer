@@ -4,71 +4,70 @@ import { Skada } from '@core/battle'
 import { ref, } from 'vue'
 
 
-// 传入skada要展示的数据
-const props = defineProps<{ items: { name: string, value: string, percent: number }[] }>()
+// 主界面展示数据  key,展示字段, 百分比
+const props = defineProps<{ items: { name: string, value: string, percent: number }[], defaultOption: string }>()
 const emit = defineEmits(['change', 'touch-item'])
 
-// 当改变mode时触发, 表达当前mode
+// 下拉框改变选项时触发
 function onChange(value) {
   emit('change', value)
 }
 
-// 当点击具体详情时触发, 在console中打印角色数据详情
-function onTouchItem(value) {
-  console.log(value)
-  emit('touch-item', value)
+// 点击具体的条触发
+function onTouchItem(name) {
+  emit('touch-item', name)
 }
 
-// skada模式选择数据
+// 下拉框选项列表
 const options = ref([
   {
-    value: 'damage',
-    label: 'damage',
+    value: 'totalDamage',
   },
   {
     value: 'dps',
-    label: 'dps',
   },
   {
-    value: 'heal',
-    label: 'heal',
+    value: 'totalHeal',
   }
 ])
-const mode = ref('damage')
 
 </script>
 
 <template>
-  <el-card class="box-card" style="margin: 10px; border: 1px solid black;">
-    <template #header>
-      <div>
-        <span>Skada,mode:</span>
-        <el-select v-model="mode" placeholder="Select" @change="onChange">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-    </template>
-
-    <div v-for="item in items" class="text item">
-      <div style="display: flex; width: 100%; padding-bottom: 5px;">
-        <el-progress
-          :text-inside="true"
-          :stroke-width="20"
-          :percentage="item.percent"
-          color="#fc5d5d"
-          style="flex-grow: 2; "
-          @click="onTouchItem(item.name)"
-        >
-          <span>{{ item.name }}:{{ item.value }}</span>
-        </el-progress>
-      </div>
+  <div style="width: 300px">
+    <div style="padding-top: 20px">
+      <span style="font-size: 14px;">Skada,mode:</span>
+      <el-select v-model="defaultOption" placeholder="Select" @change="onChange" size="mini">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.value"
+          :value="item.value"
+        ></el-option>
+      </el-select>
     </div>
-  </el-card>
+    <el-card
+      class="box-card"
+      :body-style="{ padding: '5px' }"
+      style="margin: 10px; border: 1px solid black"
+    >
+      <div v-for="item in items" class="text item">
+        <div style="display: flex; width: 100%; padding-bottom: 5px;">
+          <div style="width: 60px;">{{ item.name }}:</div>
+          <el-progress
+            :text-inside="true"
+            :stroke-width="20"
+            :percentage="item.percent"
+            color="#fc5d5d"
+            style="flex-grow: 2; "
+            @click="onTouchItem(item.name)"
+          >
+            <span>{{ item.value }}</span>
+          </el-progress>
+        </div>
+      </div>
+    </el-card>
+  </div>
 </template>
 
 <style scoped>

@@ -5,8 +5,8 @@ import Root from './pages/Root.vue'
 import { ref } from 'vue'
 import { createPhaser } from '../phaser'
 
-const enableGame = ref(true)
-const enableVue = ref(false)
+const enableGame = ref(false)
+const enableVue = ref(true)
 
 
 if (!enableGame.value) {

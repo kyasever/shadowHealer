@@ -7,7 +7,6 @@ import { ref } from 'vue';
 import { GameConfig } from '@core/game';
 import VSkada from '../components/VSkada.vue'
 
-let skada = ref({} as Skada)
 
 const time = ref('0');
 const fps = ref('0')
@@ -29,7 +28,7 @@ function startBattle(b: Battle) {
     console.timeEnd('battle')
   })
   battle.on('perSecond', () => {
-    skada.value = battle.skada
+    skadaItems.value = battle.skada.calculateResult(option.value as any)
   })
   battle.init()
   items.value = {
@@ -69,7 +68,13 @@ const skadaItems = ref([{
 },
 ])
 
-
+let option = ref('dps');
+function onSelectChange(value) {
+  option.value = value
+}
+function onTouchSkadaItem(value) {
+  battle.skada.getEntityDetails(value)
+}
 </script>
 
 <template>
@@ -83,12 +88,14 @@ const skadaItems = ref([{
     <el-button class="btn" @click="runBattle" plain type="primary">runBattle</el-button>
   </div>
   <div id="array-rendering">
-    <div v-for="entity in items">
-      <!-- 这样来让子组件认为,每次更新都是一个新的Entity.. -->
-      <VEntity :entity="{ ...entity }"></VEntity>
-    </div>
+    <VEntity :entitys="items"></VEntity>
   </div>
-  <VSkada :items="skadaItems"></VSkada>
+  <VSkada
+    :items="skadaItems"
+    @change="onSelectChange"
+    @touch-item="onTouchSkadaItem"
+    :default-option="option"
+  ></VSkada>
 </template>
 
 <style scoped>

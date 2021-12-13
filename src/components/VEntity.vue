@@ -2,7 +2,7 @@
 import { IEntity } from '@core/battle';
 import { ref, StyleValue } from 'vue';
 import SHBar from './SHBar.vue'
-const props = defineProps<{ entity: IEntity }>()
+const props = defineProps<{ entitys: IEntity[] }>()
 
 
 // 然后使用面板和其他组件重搞一下entiy
@@ -15,17 +15,34 @@ const props = defineProps<{ entity: IEntity }>()
 // prpgress ap 短条, 无文字或 尾文字
 // 最下面是加人条, 有一个加号和一个下拉框,选择角色并添加. 战斗中也能加
 
+function onTouchItem(name) {
+
+}
+
 </script>
 
 <template>
-  <SHBar :percent="entity.hp / entity.hpmax" style="border-radius: 5px;">
-    <div @click="entity.battle.skada.outPut(entity.name)">
-      entitys:
-      {{ entity.name }}:{{ entity.hp }}/{{ entity.hpmax }} {{ entity.attackRelease?.toFixed(2) }}
-      <li v-for="buff in entity.buffs">{{ buff.name }} {{ buff.release?.toFixed(2) }}</li>
+  <el-card
+    class="box-card"
+    :body-style="{ padding: '5px' }"
+    style="margin: 10px; border: 1px solid black"
+  >
+    <div v-for="item in entitys" class="text item">
+      <div style="display: flex; width: 100%; padding-bottom: 5px;">
+        <div style="width: 60px;">{{ item.name }}:</div>
+        <el-progress
+          :text-inside="true"
+          :stroke-width="20"
+          :percentage="item.hp / item.hpmax * 100"
+          color="#fc5d5d"
+          style="flex-grow: 2; "
+          @click="onTouchItem(item.name)"
+        >
+          <span>{{ item.hp }}/{{ item.hpmax }}</span>
+        </el-progress>
+      </div>
     </div>
-    <SHBar :percent="entity.ap / entity.apmax" color="#b3af77" style="height: 3px;" :z-index="-10"></SHBar>
-  </SHBar>
+  </el-card>
 </template>
 
 <style scoped>

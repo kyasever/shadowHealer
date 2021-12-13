@@ -125,10 +125,10 @@ export class Skada {
     });
   }
 
-  outPut(target: string = 'fire') {
-    console.log('damage total:');
-    // 数据总表
-    console.table(this.data);
+  getEntityDetails(target?: string) {
+    if (!target) {
+      target = this.battle.teams[0].name;
+    }
 
     // 伤害详情
     console.log('damege detail:');
@@ -166,5 +166,42 @@ export class Skada {
       });
       console.table(sortedBuff);
     }
+  }
+
+  calculateResult(type: 'totalDamage' | 'dps' | 'totalHeal') {
+    let select = [];
+    let max = 0;
+    this.data.forEach((name, data) => {
+      if (typeof data[type] === 'undefined') {
+        SHLog.error('不支持的type', type, data);
+        return;
+      }
+      if (data[type] > max) {
+        max = data[type];
+      }
+      select.push({
+        name,
+        source_value: data[type],
+        value: data[type].toFixed(1),
+        percent: 0,
+      });
+    });
+
+    select = select.map((item) => {
+      let percent = max === 0 ? 0 : (item.source_value / max) * 100;
+
+      return {
+        name: item.name,
+        value: item.value,
+        source_value: item.source_value,
+        percent,
+      };
+    });
+
+    select = select.sort((a, b) => {
+      return b.source_value - a.source_value;
+    });
+
+    return select;
   }
 }
