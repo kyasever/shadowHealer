@@ -1,6 +1,7 @@
 import { Battle } from '@core/battle';
 import { createEntity } from '@core/entitys';
 
+// 对应第二个创建按钮
 export function createBattle(): Battle {
   const battle = new Battle();
   const c1 = createEntity('wizzard', battle);
@@ -13,6 +14,7 @@ export function createBattle(): Battle {
   return battle;
 }
 
+// 对应第一个创建按钮
 export function custom1(): Battle {
   const battle = new Battle();
 

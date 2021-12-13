@@ -6,41 +6,41 @@ import { Entity } from './entity';
 import { calculateProperty } from './property';
 import { Skada } from './skada';
 
-/*
- * makeEffect 核心函数: 所有的数据操作都要走effect
+/**
+ * 核心结算逻辑, 这个类型代表一个操作会对另一个角色产生什么影响
  */
 export interface IEffect {
-  // 记录中的名字
+  /** 记录中的名字,比如技能名 */
   name: string;
-  // 释放者
+  /**  释放者 */
   caster?: Entity;
-  // 目标, 每个effect结算一个目标
+  /**目标, 每个effect结算一个目标 */
   target: Entity;
 
-  // 默认暴击率取caster
+  /**默认暴击率取caster */
   critRate?: number;
   critDamage?: number;
   isCrit?: boolean;
 
-  // 对target造成伤害(相对于hp变化取反)
+  /**对target造成伤害(相对于hp变化取反) */
   damage?: number;
-  // 对target造成治疗, 负治疗也会算作治疗,但不会致死
+  /**对target造成治疗, 负治疗也会算作治疗,但不会致死 */
   heal?: number;
-  // 对caster改变ap
+  /**对caster改变ap */
   ap_caster?: number;
-  // 对target改变ap
+  /**对target改变ap */
   ap_target?: number;
-  // 对target施加buff, 通过caster的create获得实例
+  /**对target施加buff, 通过caster的create获得实例 */
   addBuff?: string;
-  // 移除
+  /**移除 */
   removeBuff?: string;
-  // 对battle增加实体
+  /**对battle增加实体 */
   addEntity?: Entity;
 
-  // 每一步回调和处理,在这里记录日志
+  /** 每一步回调和处理,在这里记录日志 */
   logs?: string[];
 
-  // 预期结算时间, 默认为now
+  /**预期结算时间, 默认为now */
   time?: number;
 }
 

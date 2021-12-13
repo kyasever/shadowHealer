@@ -1,9 +1,6 @@
 import { IDataEntity } from '.';
 
-/**
- * 用ts代替了原来的json以便享受ts的类型定义,但是要注意, 此文件只记录关键属性, 必须可序列化
- * 此外有标准字段和自定义字段, 标准字段可以直接由标准函数解读, 自定义部分再交给自定义处理
- */
+// 得益于typescript优秀的类型提示, 鼠标放上去有注释, 写错了有红线. custom中字段的解析逻辑位于对应的monk.ts
 export const characterData: { [key: string]: IDataEntity } = {
   monk: {
     name: 'monk',
@@ -52,10 +49,19 @@ export const characterData: { [key: string]: IDataEntity } = {
       {
         name: 'skill6',
         cd: 75,
+        addBuff: 'finalBuff',
         custom: {
           hp_cost_max: 0.3,
           apmax: 100,
           during: 15,
+        },
+      },
+    ],
+    buffs: [
+      {
+        name: 'finalBuff',
+        custom: {
+          ap_max: 100,
         },
       },
     ],
