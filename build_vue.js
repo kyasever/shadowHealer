@@ -4,10 +4,13 @@ const { exit } = require('process');
 
 if (process.argv.length < 3) {
   console.error('请输入version');
+} else if (process.argv.length < 4) {
+  console.error('请输入passwd');
 } else {
   const version = process.argv[2];
+  const passwd = process.argv[3];
   console.log(`准备发布, 版本号${version}`);
-  main(version);
+  main(version, passwd);
 }
 
 async function main(version) {
@@ -28,7 +31,7 @@ async function main(version) {
     }
   }
   console.log('step5 上传cos');
-  await publish(version);
+  await publish(version, passwd);
 
   console.log(
     '已上传https://sh-1302744707.cos-website.ap-beijing.myqcloud.com '
@@ -38,9 +41,8 @@ async function main(version) {
   );
 }
 
-async function publish(version) {
-  const cos_config =
-    'coscmd config -a AKIDHNCk12mEPJwINAhwub2B3ex0mGTP4RXN -s Zrsb4F9m7ByTjiQqzsTnpb5IDsGNDl34 -b sh-1302744707 -r ap-beijing';
+async function publish(version, passwd) {
+  const cos_config = `coscmd config -a AKIDHNCk12mEPJwINAhwub2B3ex0mGTP4RXN -s ${passwd} -b sh-1302744707 -r ap-beijing`;
   await exec(cos_config);
   const cos_upload = `coscmd upload -r ./dist/ /${version}`;
   await exec(cos_upload);
