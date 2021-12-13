@@ -226,7 +226,7 @@ class GameScene extends Phaser.Scene {
     //  Some stars to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
     this.stars = this.physics.add.group({
       key: 'star',
-      repeat: 11,
+      repeat: 888,
       setXY: { x: 12, y: 0, stepX: 50 },
     });
 
@@ -260,13 +260,13 @@ class GameScene extends Phaser.Scene {
       this
     );
 
-    this.physics.add.collider(
-      this.player,
-      this.bombs,
-      this.hitBomb,
-      null,
-      this
-    );
+    // this.physics.add.collider(
+    //   this.player,
+    //   this.bombs,
+    //   this.hitBomb,
+    //   null,
+    //   this
+    // );
   }
 
   //  ------------------------
@@ -323,11 +323,11 @@ class GameScene extends Phaser.Scene {
     const player = this.player;
 
     if (cursors.left.isDown) {
-      player.setVelocityX(-160);
+      player.setVelocityX(-320);
 
       player.anims.play('left', true);
     } else if (cursors.right.isDown) {
-      player.setVelocityX(160);
+      player.setVelocityX(320);
 
       player.anims.play('right', true);
     } else {
@@ -337,7 +337,7 @@ class GameScene extends Phaser.Scene {
     }
 
     if (cursors.up.isDown && player.body.touching.down) {
-      player.setVelocityY(-330);
+      player.setVelocityY(-400);
     }
   }
 
@@ -348,7 +348,7 @@ class GameScene extends Phaser.Scene {
     this.score += 10;
     this.scoreText.setText('Score: ' + this.score);
 
-    if (this.stars.countActive(true) === 0) {
+    if (this.stars.countActive(true) <= 2) {
       //  A new batch of stars to collect
       this.stars.children.iterate(function(child) {
         child.enableBody(true, child.x, 0, true, true);

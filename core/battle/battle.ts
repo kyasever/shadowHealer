@@ -8,7 +8,9 @@ import { Skada } from './skada';
 type EventType =
   | { event: 'init'; param: void }
   | { event: 'update'; param: void }
-  | { event: 'end'; param: void };
+  | { event: 'perSecond'; param: void }
+  | { event: 'end'; param: void }
+  | { event: 'stop'; param: void };
 
 export type IBattle = SHInterface<Battle>;
 
@@ -39,6 +41,12 @@ export class Battle {
     this.on('update', () => {
       this.update();
     });
+
+    this.on('perSecond', () => {
+      // 实际每帧用时ms: (new Date().getTime() - this.FPSTimeStart) / 50
+      this.FPS = (1000 / (new Date().getTime() - this.FPSTimeStart)) * 50;
+      this.FPSTimeStart = new Date().getTime();
+    });
   }
 
   init() {
@@ -62,7 +70,11 @@ export class Battle {
 
   async run() {
     this.emit('init', null);
-    while (true) {
+    let isContinue = true;
+    this.on('stop', () => {
+      isContinue = false;
+    });
+    while (isContinue) {
       // =0 说明不需要间隔,最快速度跑帧
       if (GameConfig.speed === 0) {
       }
@@ -87,9 +99,7 @@ export class Battle {
       this.FPSCount++;
       if (this.FPSCount >= FrameCount) {
         this.FPSCount = 0;
-        // 实际每帧用时ms: (new Date().getTime() - this.FPSTimeStart) / 50
-        this.FPS = (1000 / (new Date().getTime() - this.FPSTimeStart)) * 50;
-        this.FPSTimeStart = new Date().getTime();
+        this.emit('perSecond', null);
       }
 
       this._eventEmitter.emit('update');

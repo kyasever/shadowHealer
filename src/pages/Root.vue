@@ -22,7 +22,7 @@ function changeGameSpeed() {
   GameConfig.speed = gameSpeedTruth[gameSpeed.value]
 }
 
-const active = ref(1)
+const active = ref("Battle")
 
 let lastSpeed = gameSpeed.value
 function pause() {
@@ -62,13 +62,13 @@ function pause() {
     <el-button @click="pause">{{ gameSpeed === 0 ? 'run' : 'pause' }}</el-button>
   </div>
 
-  <el-tabs v-model:active="active">
-    <el-tab-pane label="Game">game</el-tab-pane>
-    <el-tab-pane label="Battle">
+  <el-tabs v-model="active">
+    <el-tab-pane label="Game" name="Game">game</el-tab-pane>
+    <el-tab-pane label="Battle" name="Battle">
       <VBattle />
     </el-tab-pane>
-    <el-tab-pane label="Simulate">simulate</el-tab-pane>
-    <el-tab-pane label="Test">test</el-tab-pane>
+    <el-tab-pane label="Simulate" name="Simulate">simulate</el-tab-pane>
+    <el-tab-pane label="Test" name="Test">test</el-tab-pane>
   </el-tabs>
 </template>
 

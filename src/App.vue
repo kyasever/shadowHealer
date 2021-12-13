@@ -1,12 +1,12 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import Root from './components/Root.vue'
+import Root from './pages/Root.vue'
 import { ref } from 'vue'
 import { createPhaser } from '../phaser'
 
-const enableGame = ref(false)
-const enableVue = ref(true)
+const enableGame = ref(true)
+const enableVue = ref(false)
 
 
 if (!enableGame.value) {
@@ -36,8 +36,14 @@ const refMsg = ref({ v: 'msg' })
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 20px;
+  left: 0;
+  top: 0;
   position: absolute;
   width: 100%;
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
 }
 </style>

@@ -1,10 +1,13 @@
 <script setup lang="ts">
 
-import VEntity from './VEntity.vue'
-import { Battle, Entity, IEntity } from '@core/battle';
+import VEntity from '../components/VEntity.vue'
+import { Battle, Entity, IEntity, Skada } from '@core/battle';
 import { createBattle, custom1 } from './runner'
 import { ref } from 'vue';
 import { GameConfig } from '@core/game';
+import VSkada from '../components/VSkada.vue'
+
+let skada = ref({} as Skada)
 
 const time = ref('0');
 const fps = ref('0')
@@ -24,6 +27,9 @@ function startBattle(b: Battle) {
   })
   battle.on('end', () => {
     console.timeEnd('battle')
+  })
+  battle.on('perSecond', () => {
+    skada.value = battle.skada
   })
   battle.init()
   items.value = {
@@ -46,6 +52,23 @@ function runBattle() {
 
 
 
+const skadaItems = ref([{
+  name: 'aaa',
+  value: '350.12',
+  percent: 100
+},
+{
+  name: 'bbb',
+  value: '310.3',
+  percent: 80
+},
+{
+  name: 'ccc',
+  value: '245',
+  percent: 60
+},
+])
+
 
 </script>
 
@@ -59,12 +82,13 @@ function runBattle() {
     <el-button class="btn" @click="loadBattle" plain type="primary">startBattle</el-button>
     <el-button class="btn" @click="runBattle" plain type="primary">runBattle</el-button>
   </div>
-  <ul id="array-rendering">
-    <li v-for="entity in items">
+  <div id="array-rendering">
+    <div v-for="entity in items">
       <!-- 这样来让子组件认为,每次更新都是一个新的Entity.. -->
       <VEntity :entity="{ ...entity }"></VEntity>
-    </li>
-  </ul>
+    </div>
+  </div>
+  <VSkada :items="skadaItems"></VSkada>
 </template>
 
 <style scoped>
