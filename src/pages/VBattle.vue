@@ -13,16 +13,30 @@ const fps = ref('0')
 let battle: Battle
 GameConfig.speed = 0.01
 
-const items = ref<Array<IEntity>>()
+const teams = ref<Array<Entity>>([])
+const enemys = ref<Array<Entity>>([])
+
+function updateTree(b: Battle) {
+  time.value = battle.time.toFixed(2)
+  fps.value = battle.FPS.toFixed(2)
+  teams.value = [
+    ...battle.teams
+  ]
+  enemys.value = [
+    ...battle.enemys
+  ]
+}
+
 function startBattle(b: Battle) {
   battle = b;
-  console.time('battle')
+  battle.on('init', () => {
+    console.time('battle')
+  })
   battle.on('update', () => {
-    time.value = battle.time.toFixed(2)
-    fps.value = battle.FPS.toFixed(2)
-    items.value = [
-      ...battle.entitys as any
-    ]
+    updateTree(battle)
+  })
+  battle.on('selectEntity', () => {
+    updateTree(battle)
   })
   battle.on('end', () => {
     console.timeEnd('battle')
@@ -31,9 +45,12 @@ function startBattle(b: Battle) {
     skadaItems.value = battle.skada.calculateResult(option.value as any)
   })
   battle.init()
-  items.value = {
-    ...battle.entitys as any
-  }
+  teams.value = [
+    ...battle.teams
+  ]
+  enemys.value = [
+    ...battle.enemys
+  ]
 
 }
 
@@ -75,11 +92,15 @@ function onSelectChange(value) {
 function onTouchSkadaItem(value) {
   battle.skada.getEntityDetails(value)
 }
+
+function debug() {
+  console.log(battle)
+}
 </script>
 
 <template>
   <div style="display: flex; height: 40px; align-items: center;">
-    <div class="label">time: {{ time }}</div>
+    <div class="label" @click="debug">time: {{ time }}</div>
     <div class="label">logicFPS: {{ fps }}</div>
   </div>
   <div style="display: flex;">
@@ -87,9 +108,8 @@ function onTouchSkadaItem(value) {
     <el-button size="mini" class="btn" @click="loadBattle" plain type="primary">startBattle</el-button>
     <el-button size="mini" class="btn" @click="runBattle" plain type="primary">runBattle</el-button>
   </div>
-  <div id="array-rendering">
-    <VEntity :entitys="items"></VEntity>
-  </div>
+  <VEntity :entitys="teams"></VEntity>
+  <VEntity :entitys="enemys"></VEntity>
   <VSkada
     :items="skadaItems"
     @change="onSelectChange"

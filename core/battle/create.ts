@@ -40,6 +40,7 @@ export function createEntityFromData(battle, data: IDataEntity): Entity {
           if (skillData.damage) {
             damage += skillData.damage;
           }
+          console.log(entity, entity.target);
           makeEffect({
             caster: entity,
             target: entity.target,

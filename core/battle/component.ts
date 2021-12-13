@@ -6,7 +6,7 @@ import { SHLog } from '../utils';
 export function useSkillWithPriority(entity: Entity) {
   if (entity.skillPriority) {
     entity.on('attack', () => {
-      entity.target = entity.battle.coreTarget;
+      // entity.target = entity.battle.coreTarget;
       let hasUsedSkill = false;
       for (let i = 0; i < entity.skillPriority.length; i++) {
         const skill = entity.skills[entity.skillPriority[i]];

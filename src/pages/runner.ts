@@ -10,7 +10,10 @@ export function createBattle(): Battle {
   const c4 = createEntity('normalDPS', battle);
   const c5 = createEntity('normalDPS', battle);
   battle.teams = [c1, c2, c3, c4, c5];
-  battle.enemys = [createEntity('normalBOSS', battle)];
+  battle.enemys = [
+    createEntity('normalBOSS', battle),
+    createEntity('stake', battle),
+  ];
   return battle;
 }
 

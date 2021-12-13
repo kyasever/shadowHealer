@@ -1,10 +1,11 @@
+import { SHLog } from '@core/utils';
 import { debug } from 'console';
 import { createGame } from './scene';
 
 export function createPhaser(id) {
   const canvas: any = document.querySelector(id);
   if (!canvas) {
-    console.warn(`未找到节点${id}`);
+    SHLog.warn(`未找到节点${id}`);
     return;
   }
 
@@ -25,7 +26,7 @@ export function createPhaser(id) {
     contextCreationConfig
   );
   if (!ctx) {
-    console.warn('创建ctx失败');
+    SHLog.warn('创建ctx失败');
     return;
   }
   createGame(canvas, ctx);

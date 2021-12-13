@@ -71,7 +71,8 @@ export class Entity {
 
   /** addbuff每次加buff都应该是一个新的对象,因此用函数得到这个新对象 */
   buffCreater: { [key: string]: () => Buff };
-
+  /** 是否被选中 */
+  isSelected: boolean;
   _eventEmitter: EventEmitter;
 
   constructor(battle: Battle, name, property) {
@@ -89,6 +90,7 @@ export class Entity {
     this._eventEmitter = new EventEmitter();
     this.buffCreater = {};
     this.custom = {};
+    this.isSelected = false;
     calculateProperty(this);
     this.hp = this.hpmax;
     this.ap = this.apmax;

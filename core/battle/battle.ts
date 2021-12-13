@@ -10,7 +10,8 @@ type EventType =
   | { event: 'update'; param: void }
   | { event: 'perSecond'; param: void }
   | { event: 'end'; param: void }
-  | { event: 'stop'; param: string };
+  | { event: 'stop'; param: string }
+  | { event: 'selectEntity'; param: string };
 
 export type IBattle = SHInterface<Battle>;
 
@@ -21,8 +22,12 @@ export class Battle {
   teams: Entity[] = [];
   // 敌人
   enemys: Entity[] = [];
+
+  // 玩家操作角色
+  player: Entity;
   // 主要目标
   coreTarget: Entity;
+
   time: number = 0;
   timeLimit: number = 900;
   skada: Skada;
@@ -47,11 +52,23 @@ export class Battle {
       this.FPS = (1000 / (new Date().getTime() - this.FPSTimeStart)) * 50;
       this.FPSTimeStart = new Date().getTime();
     });
+
+    this.on('selectEntity', (name) => {
+      this.entitys.forEach((entity) => {
+        if (entity.name === name) {
+          entity.isSelected = true;
+          this.player.target = entity;
+        } else {
+          entity.isSelected = false;
+        }
+      });
+    });
   }
 
   init() {
     this.entitys = [...this.teams, ...this.enemys];
-    this.coreTarget = this.enemys[0];
+    this.coreTarget = this.coreTarget || this.enemys[0];
+    this.player = this.player || this.entitys[0];
   }
 
   on<T extends EventType['event']>(

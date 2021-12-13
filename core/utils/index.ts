@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { NonFunctionKeys } from 'utility-types';
+import { SHLog } from './log';
 
 export * from './log';
 
@@ -33,7 +34,7 @@ export async function loadFromJson<T>(name: string): Promise<T> {
     method: 'get',
     url: `./assets/data/${name}`,
   }).catch((error) => {
-    console.error('get data failed', error);
+    SHLog.error('get data failed', error);
   });
 
   if (res) {
