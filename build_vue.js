@@ -13,7 +13,7 @@ if (process.argv.length < 3) {
   main(version, passwd);
 }
 
-async function main(version) {
+async function main(version, passwd) {
   console.log('step1 安装依赖');
   await exec('yarn');
   console.log('step2 打包vue');
