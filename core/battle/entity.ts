@@ -165,4 +165,9 @@ export class Entity {
     this.ap = end;
     return changed;
   }
+
+  getDetail() {
+    console.log(this);
+    return this;
+  }
 }

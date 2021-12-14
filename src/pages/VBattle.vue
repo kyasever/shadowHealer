@@ -92,6 +92,13 @@ function onSelectChange(value) {
 function onTouchSkadaItem(value) {
   battle.skada.getEntityDetails(value)
 }
+function onTouchEntityName(value) {
+  battle.entitys.forEach(e => {
+    if (e.name === value) {
+      e.getDetail()
+    }
+  })
+}
 
 function debug() {
   console.log(battle)
@@ -108,12 +115,12 @@ function debug() {
     <el-button size="mini" class="btn" @click="loadBattle" plain type="primary">startBattle</el-button>
     <el-button size="mini" class="btn" @click="runBattle" plain type="primary">runBattle</el-button>
   </div>
-  <VEntity :entitys="teams"></VEntity>
-  <VEntity :entitys="enemys"></VEntity>
+  <VEntity :entitys="teams" @touch-name="onTouchEntityName"></VEntity>
+  <VEntity :entitys="enemys" @touch-name="onTouchEntityName"></VEntity>
   <VSkada
     :items="skadaItems"
     @change="onSelectChange"
-    @touch-item="onTouchSkadaItem"
+    @touch-name="onTouchSkadaItem"
     :default-option="option"
   ></VSkada>
 </template>

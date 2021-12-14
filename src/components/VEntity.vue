@@ -4,6 +4,7 @@ import { SHLog } from '@core/utils';
 import { ref, StyleValue } from 'vue';
 import SHBar from './SHBar.vue'
 const props = defineProps<{ entitys: Entity[] }>()
+const emit = defineEmits(['change', 'touch-name'])
 
 
 
@@ -11,9 +12,8 @@ function onClickItem(item) {
   item.battle.emit('selectEntity', item.name);
 }
 
-// 点击角色名字在控制台查看角色信息
-function onClickName(item) {
-  SHLog.info(`查看角色信息: ${item.name}`, item)
+function onClickName(name: string) {
+  emit('touch-name', name)
 }
 
 </script>
@@ -30,7 +30,7 @@ function onClickName(item) {
         :style="{ paddingBottom: '8px', backgroundColor: item.isSelected ? '#b8ecec' : '' }"
       >
         <div style="display: flex; width: 100%;">
-          <div style="width: 60px;" @click="onClickName(item)">{{ item.name }}:</div>
+          <div style="width: 60px;" @click="onClickName(item.name)">{{ item.name }}:</div>
           <el-progress
             :text-inside="true"
             :stroke-width="20"
