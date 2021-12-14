@@ -36,7 +36,8 @@ type EventType =
   | { event: 'afterBehit'; param: IEffect }
   | { event: 'update'; param: void }
   | { event: 'attack'; param: void }
-  | { event: 'calculateProperty'; param: IEntityProperty };
+  | { event: 'calculateProperty'; param: IEntityProperty }
+  | { event: 'controlUseSkill'; param: string };
 
 export type IEntity = SHInterface<Entity>;
 
@@ -96,8 +97,8 @@ export class Entity {
     this.ap = this.apmax;
 
     // 这两个常规监听一定会处理
-    this.use(dealBuff);
-    this.use(dealAttack);
+    this.useComponent(dealBuff);
+    this.useComponent(dealAttack);
   }
 
   on<T extends EventType['event']>(
@@ -114,7 +115,7 @@ export class Entity {
     this._eventEmitter.emit(event, param);
   }
 
-  use(callBack: (entity: Entity) => void) {
+  useComponent(callBack: (entity: Entity) => void) {
     callBack(this);
   }
 

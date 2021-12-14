@@ -1,20 +1,35 @@
 import { SHInterface } from '@core/utils';
 import { EventEmitter } from 'events';
+import { Entity } from '.';
 
 type EventType =
   | { event: 'use'; param: void }
   | { event: 'canUse'; param: void };
 
 export type ISkill = SHInterface<Skill>;
+
+/**
+ * 生命周期
+ * 触发:
+ *  use: 使用技能
+ *  canUse: 查询是否可以使用
+ */
 export class Skill {
   // caster 本质上是effect需要的, apcost也应该属于effect
   name: string;
   cd?: number;
   cdRelease?: number;
   custom?: any;
+  entity: Entity;
+  ap_caster?: number;
 
-  constructor(name) {
+  constructor(name, entity) {
+    this.entity = entity;
     this.name = name;
+    this.cd = 0;
+    this.cdRelease = 0;
+    this.ap_caster = 0;
+
     this._eventEmitter = new EventEmitter();
   }
 
@@ -44,5 +59,9 @@ export class Skill {
       }
     });
     return canUse;
+  }
+
+  useComponent(callBack: (skill: Skill) => void) {
+    callBack(this);
   }
 }

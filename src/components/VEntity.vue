@@ -6,20 +6,12 @@ import SHBar from './SHBar.vue'
 const props = defineProps<{ entitys: Entity[] }>()
 
 
-// 然后使用面板和其他组件重搞一下entiy
-// 战场两栏布局, 每栏纵向布局card组件, 有边框
-
-// card
-// name  放上去显示tooltip, 角色详情.
-// tags 用来做buff, 每一个tag就是一个buff
-// progress 先用自带的.. 后期考虑隐藏自己搞一个居中的
-// prpgress ap 短条, 无文字或 尾文字
-// 最下面是加人条, 有一个加号和一个下拉框,选择角色并添加. 战斗中也能加
 
 function onClickItem(item) {
   item.battle.emit('selectEntity', item.name);
 }
 
+// 点击角色名字在控制台查看角色信息
 function onClickName(item) {
   SHLog.info(`查看角色信息: ${item.name}`, item)
 }

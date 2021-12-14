@@ -1,12 +1,25 @@
 import { DeltaTime } from '@core/game';
-import { Entity, makeEffect } from '.';
+import { Entity, makeEffect, Skill } from '.';
 import { SHLog } from '../utils';
 
+export function dealPlayerControl(entity: Entity) {
+  entity.on('controlUseSkill', (event) => {
+    if (!entity.skills[event]) {
+      SHLog.error(`not inclued skill:${event}`);
+    }
+    const skill = entity.skills[event];
+    if (skill.canUse()) {
+      skill.emit('use', null);
+      SHLog.info(`controlUseSkill: ${entity.name} used skill ${skill.name}`);
+    }
+  });
+}
+
 /** 根据skillPriority字段, 当触发attack事件时自动释放技能 */
-export function useSkillWithPriority(entity: Entity) {
+export function dealSkillWithPriority(entity: Entity) {
   if (entity.skillPriority) {
     entity.on('attack', () => {
-      // entity.target = entity.battle.coreTarget;
+      entity.target = entity.target || entity.battle.coreTarget;
       let hasUsedSkill = false;
       for (let i = 0; i < entity.skillPriority.length; i++) {
         const skill = entity.skills[entity.skillPriority[i]];
@@ -20,7 +33,6 @@ export function useSkillWithPriority(entity: Entity) {
         if (skill.canUse()) {
           hasUsedSkill = true;
           skill.emit('use', null);
-          skill.cdRelease = skill.cd;
           SHLog.info(`${entity.name} used skill ${skill.name}`);
           break;
         }

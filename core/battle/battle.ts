@@ -15,6 +15,17 @@ type EventType =
 
 export type IBattle = SHInterface<Battle>;
 
+/**
+ * 生命周期
+ * 监听:
+ *  init: 调用battle.start时立即触发
+ *  update: 每帧触发,触发50次为逻辑上一秒
+ *  perSecond: 每秒触发(50帧一次)
+ *  end: 结束后触发
+ * 触发:
+ *  stop: 终止游戏
+ *  selectEntity: 玩家角色选择一个目标
+ */
 export class Battle {
   /** 所有场上存活的character, 引用可以保存在多个不同的容器里 */
   entitys: Entity[];

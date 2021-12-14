@@ -16,12 +16,12 @@ export function createEntityFromData(battle, data: IDataEntity): Entity {
 
   if (data.skills) {
     data.skills.forEach((skillData) => {
-      const skill = new Skill(skillData.name);
+      const skill = new Skill(skillData.name, entity);
       skill.cd = skillData.cd;
       skill.custom = skillData.custom;
-
+      skill.ap_caster = skillData.ap_caster;
       skill.on('canUse', () => {
-        if (entity.ap < -skillData.ap_caster) {
+        if (skill.entity.ap < -skill.ap_caster) {
           return false;
         }
         if (skill.cdRelease > 0) {
@@ -40,6 +40,7 @@ export function createEntityFromData(battle, data: IDataEntity): Entity {
           if (skillData.damage) {
             damage += skillData.damage;
           }
+          skill.cdRelease = skill.cd;
           console.log(entity, entity.target);
           makeEffect({
             caster: entity,

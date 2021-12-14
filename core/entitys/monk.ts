@@ -1,5 +1,5 @@
 import {
-  useSkillWithPriority,
+  dealSkillWithPriority,
   Battle,
   Buff,
   createEntityFromData,
@@ -11,7 +11,7 @@ import { SHLog } from '../utils';
 export function createEntityMonk(battle: Battle) {
   const monkData = loadCharacterData('monk');
   const entity = createEntityFromData(battle, monkData);
-  entity.use(useSkillWithPriority);
+  entity.useComponent(dealSkillWithPriority);
 
   let cantAttack = 0;
 
